@@ -28,29 +28,31 @@ Si esto no convence, nada de lo demás importa.
 Todo con formas primitivas (cajas y planos). **Sin modelos, sin texturas.**
 
 ### Base
-- [ ] Proyecto Vite + React + TypeScript
-- [ ] Instalar `three`, `@react-three/fiber`, `@react-three/drei`, `zustand`
-- [ ] `Scene.tsx` con `<Canvas>`, `frameloop="demand"`, `dpr` adaptativo
+- [x] Proyecto Vite + React + TypeScript
+- [x] Instalar `three`, `@react-three/fiber`, `@react-three/drei`, `zustand`
+- [x] `Scene.tsx` con `<Canvas>`, `frameloop="demand"`, `dpr` adaptativo
 
 ### El cuarto
-- [ ] `Room.tsx`: piso, 4 paredes, techo. Cuarto cerrado.
-- [ ] Iluminación provisional (ambiente + direccional). Se reemplaza por horneada en fase 5.
-- [ ] Cajas marcando cada objeto: escritorio, monitor, celular, carpeta, silla,
+- [x] `Room.tsx`: piso, 4 paredes, techo. Cuarto cerrado.
+- [x] Iluminación provisional. Ya imita el esquema nocturno de SPEC §15.
+- [x] Cajas marcando cada objeto: escritorio, monitor, celular, carpeta, silla,
       velador, pizarra, estantería, pared de diplomas, cartel, puerta
 
 ### Navegación
-- [ ] `src/data/hotspots.ts` con los 6 puntos (SPEC §3)
-- [ ] `Hotspot.tsx`: esfera brillante + pulso + `<button>` accesible detrás
-- [ ] `CameraRig.tsx`: viaje suave entre puntos con desaceleración al llegar
-- [ ] `invalidate()` durante el viaje, congelar al terminar
-- [ ] Ocultar el punto en el que ya estás parado
-- [ ] Estado en Zustand: punto activo, panel abierto
+- [x] `src/data/hotspots.ts` con los 6 puntos (SPEC §3)
+- [x] `Hotspot.tsx`: puntito con pulso + `<button>` accesible.
+      Se resolvió con `<Html>` de drei: el pulso lo anima CSS, así no hace falta
+      pedir frames continuos y además es un botón real.
+- [x] `CameraRig.tsx`: viaje suave entre puntos con desaceleración al llegar
+- [x] `invalidate()` durante el viaje, congelar al terminar
+- [x] Ocultar el punto en el que ya estás parado
+- [x] Estado en Zustand: punto activo, panel abierto
 
 ### Barra fija
-- [ ] `src/data/profile.ts` con nombre, rol y links
-- [ ] `TopBar.tsx`: nombre + rol a la izquierda, `[CV] [Mail] [in] [gh]` a la derecha
-- [ ] Segunda fila con los accesos a las zonas
-- [ ] Colapsar en celular: nombre + CV visibles, el resto en menú
+- [x] `src/data/profile.ts` con nombre, rol y links (datos de mentira)
+- [x] `TopBar.tsx`: nombre + rol a la izquierda, `[CV] [Mail] [in] [gh]` a la derecha
+- [x] Segunda fila con los accesos a las zonas
+- [x] Colapsar en celular: identidad apilada, zonas con scroll horizontal
 
 ### Prueba de humo del avatar
 
