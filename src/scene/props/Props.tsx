@@ -11,8 +11,6 @@ const DARK = '#3b3a38'
 const PAPER = '#d8d2c6'
 const SCREEN = '#5c7fa8'
 const LAMP = '#e8c07a'
-const SKIN = '#c98d6b'
-const CLOTH = '#5d6b7a'
 
 type BoxProps = {
   position: [number, number, number]
@@ -53,20 +51,6 @@ export function Props() {
       <Box position={[0.72, 0.45, -0.85]} size={[0.5, 0.08, 0.5]} color={DARK} />
       <Box position={[0.72, 0.73, -0.63]} size={[0.5, 0.55, 0.08]} color={DARK} />
       <Box position={[0.72, 0.2, -0.85]} size={[0.1, 0.4, 0.1]} color={DARK} />
-
-      {/* ── Avatar provisional: se reemplaza por el modelo de Avaturn ── */}
-      <mesh position={[0.72, 0.5, -0.68]}>
-        <boxGeometry args={[0.34, 0.14, 0.45]} />
-        <meshStandardMaterial color={CLOTH} />
-      </mesh>
-      <mesh position={[0.72, 0.82, -0.88]}>
-        <capsuleGeometry args={[0.17, 0.3, 4, 12]} />
-        <meshStandardMaterial color={CLOTH} />
-      </mesh>
-      <mesh position={[0.72, 1.16, -0.88]}>
-        <sphereGeometry args={[0.13, 20, 16]} />
-        <meshStandardMaterial color={SKIN} />
-      </mesh>
 
       {/* ── Certificaciones: pared norte ── */}
       {[-1.2, -0.4, 0.4, 1.2].map((x) => (

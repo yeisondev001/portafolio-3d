@@ -1,6 +1,8 @@
+import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { HOTSPOTS, ENTRADA } from '../data/hotspots'
 import { Room } from './Room'
+import { Avatar } from './Avatar'
 import { Props } from './props/Props'
 import { CameraRig } from './CameraRig'
 import { Hotspot } from './Hotspot'
@@ -28,6 +30,11 @@ export function Scene() {
 
       <Room />
       <Props />
+
+      {/* De pie al lado de la silla hasta que lleguen las animaciones de Mixamo */}
+      <Suspense fallback={null}>
+        <Avatar position={[0.72, 0, -0.55]} rotation={[0, Math.PI, 0]} />
+      </Suspense>
       <CameraRig />
 
       {HOTSPOTS.map((hotspot) => (
