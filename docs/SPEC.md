@@ -488,6 +488,34 @@ cumplen; un escaneo crudo no, hay que riggearlo. **Elegir por parecido, no por l
 
 ---
 
+### Cómo se anima (Mixamo)
+
+La **T-Pose no es una pose final**, es la posición de reposo del esqueleto. Que el
+avatar esté sentado, parado o saludando lo define la **animación**, que es un archivo
+aparte: rotaciones de huesos en el tiempo. Cuerpo y movimiento se combinan al final.
+
+Flujo completo:
+
+1. En Avaturn, "Use with Mixamo animations" → bajar el **FBX de referencia**
+   (Mixamo no lee `.glb`).
+2. Subir ese FBX a Mixamo y elegir las animaciones, previsualizándolas con el avatar.
+3. Descargar los clips.
+4. En Blender: avatar + clips → un único `.glb`.
+5. En el código: reproducir los clips y encadenar las transiciones.
+
+**Tres gotchas conocidos:**
+
+- **Sentado + saludo a la vez es más caro que cada cosa por separado.** Los saludos de
+  Mixamo son de pie; los clips sentados no suelen mover los brazos. Combinarlos exige
+  mezclar tren superior de un clip con tren inferior de otro. Lo barato: buscar un clip
+  sentado que ya traiga gesto de brazos.
+- **La silla se acomoda a la animación, no al revés.** Los clips sentados asumen una
+  silla imaginaria a cierta altura. Primero se elige el clip, después se mueve la silla.
+  Al revés el avatar queda flotando o hundido.
+- **El seguimiento de mirada no es una animación.** Se hace por código, rotando el hueso
+  del cuello hacia la cámara por encima del clip que esté corriendo. Por eso funciona en
+  cualquier pose y no hay que grabarlo.
+
 ## 15. Estilo visual
 
 **La decisión de diseño más importante del proyecto**, porque de ella depende que el

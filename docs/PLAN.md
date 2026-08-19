@@ -144,7 +144,11 @@ Ver SPEC §14 para los criterios.
 - [ ] `gltfjsx --types --transform` para optimizar y tipar
 
 ### Animación
+- [ ] Bajar el FBX de referencia de Avaturn y llevarlo a Mixamo (no lee `.glb`)
 - [ ] Animaciones de Mixamo: sentado inactivo, saludar, señalar el monitor
+- [ ] Preferir un clip sentado que ya traiga gesto de brazos; mezclar tren superior
+      e inferior de dos clips es el plan B, más caro (SPEC §14)
+- [ ] Elegido el clip, mover la silla para que calce con él, no al revés
 - [ ] Respiración / inactividad sutil — obligatorio, evita el efecto estatua
 - [ ] Máquina de estados: inactivo → saluda al entrar → señala al acercarse
 - [ ] Transiciones suaves entre animaciones
