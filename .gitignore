@@ -20,3 +20,6 @@ yarn-error.log*
 
 # El .glb original de Avaturn: pesa 4,3 MB y se puede volver a bajar
 public/models/*.original.glb
+
+# FBX crudos de Mixamo: se convierten a JSON con scripts/convertir-animaciones.mjs
+raw/

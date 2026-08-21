@@ -49,7 +49,7 @@ export function Props() {
 
       {/* ── Silla ── */}
       <Box position={[0.72, 0.45, -0.85]} size={[0.5, 0.08, 0.5]} color={DARK} />
-      <Box position={[0.72, 0.73, -0.63]} size={[0.5, 0.55, 0.08]} color={DARK} />
+      <Box position={[0.72, 0.73, -1.06]} size={[0.5, 0.55, 0.08]} color={DARK} />
       <Box position={[0.72, 0.2, -0.85]} size={[0.1, 0.4, 0.1]} color={DARK} />
 
       {/* ── Certificaciones: pared norte ── */}
