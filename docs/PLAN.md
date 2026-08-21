@@ -66,11 +66,16 @@ Todo con formas primitivas (cajas y planos). **Sin modelos, sin texturas.**
 El avatar es el corazón del proyecto (SPEC §14), así que se valida temprano aunque el
 trabajo fino vaya en la fase 4. Objetivo: confirmar que el efecto funciona, no pulirlo.
 
-- [ ] Generar avatar en **Avaturn** desde una foto
-- [ ] Montarlo sentado en la silla, sin pulir
-- [ ] Una animación de saludo de Mixamo
-      (Mixamo no lee `.glb`: usar el FBX de referencia de Avaturn como intermediario — SPEC §14)
-- [ ] **La cabeza sigue a la cámara**
+- [x] Generar avatar en **Avaturn** desde una foto
+- [x] Comprimirlo: 4,3 MB → 0,7 MB (`scripts/comprimir-texturas.mjs`)
+- [x] Montarlo sentado en la silla
+- [x] Animaciones de Mixamo funcionando.
+      **Nos salteamos Blender**: los huesos de Avaturn y los de Mixamo se llaman
+      igual, así que el AnimationMixer los une por nombre. Un script convierte
+      los `.fbx` a JSON (`scripts/convertir-animaciones.mjs`).
+- [x] **La cabeza sigue a la cámara**
+- [ ] Falta un clip con gesto de llamar ("vení, acercate"): hoy hay `sitting`
+      y `sitting-pointing`
 - [ ] Mirarlo animado dentro del cuarto y decidir si el parecido alcanza
 
 Si no alcanza, escalar según el camino de decisión de SPEC §14 **antes** de seguir.
