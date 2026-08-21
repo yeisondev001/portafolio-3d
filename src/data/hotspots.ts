@@ -4,10 +4,10 @@
  * Agregar una zona nueva = agregar un objeto a este array y su id al tipo.
  * No hay que tocar CameraRig.tsx ni Scene.tsx (CLAUDE.md).
  *
- * Sistema de coordenadas del cuarto (4 × 2,5 × 3,5 m, centrado en el origen):
- *   x: -2 (oeste, estantería) .. +2 (este, pizarra)
- *   y:  0 (piso) .. 2,5 (techo)
- *   z: -1,75 (norte, certificaciones) .. +1,75 (sur, puerta)
+ * Sistema de coordenadas del cuarto (5 × 2,7 × 4,4 m, centrado en el origen):
+ *   x: -2,5 (oeste, estantería) .. +2,5 (este, pizarra y cama)
+ *   y:  0 (piso) .. 2,7 (techo)
+ *   z: -2,2 (norte, escritorio y certificaciones) .. +2,2 (sur, puerta)
  */
 
 export type HotspotId =
@@ -46,51 +46,51 @@ export const HOTSPOTS: readonly Hotspot[] = [
   {
     id: 'entrada',
     label: 'Entrada',
-    camera: [0, 1.6, 1.3],
-    target: [-0.3, 1.05, -1.3],
-    marker: [0, 1.45, 1.05],
+    camera: [-0.6, 1.62, 1.72],
+    target: [-0.2, 1.15, -1.5],
+    marker: [-0.6, 1.5, 1.5],
     panel: null,
     duration: 1.8,
   },
   {
     id: 'avatar',
     label: 'Sobre mí',
-    camera: [0.62, 1.3, 0.5],
-    target: [0.62, 1.1, -0.9],
-    marker: [0.62, 1.48, -0.9],
+    camera: [0.24, 1.32, 0.28],
+    target: [0.2, 1.12, -1.2],
+    marker: [0.2, 1.5, -1.2],
     panel: 'sobre-mi',
   },
   {
     id: 'escritorio',
     label: 'Escritorio',
-    camera: [-0.62, 1.2, -0.6],
-    target: [-0.62, 1.02, -1.5],
-    marker: [-0.62, 1.38, -1.42],
+    camera: [-0.62, 1.22, -1.0],
+    target: [-0.62, 1.04, -1.95],
+    marker: [-0.62, 1.4, -1.87],
     // Sin panel automático: al llegar se elige entre monitor, celular y carpeta
     panel: null,
   },
   {
     id: 'certificaciones',
     label: 'Certificaciones',
-    camera: [0.98, 1.68, -0.62],
-    target: [0.98, 1.6, -1.75],
-    marker: [0.98, 1.56, -1.58],
+    camera: [0.98, 1.7, -1.05],
+    target: [0.98, 1.62, -2.2],
+    marker: [0.98, 1.58, -2.03],
     panel: 'certificaciones',
   },
   {
     id: 'stack',
     label: 'Stack',
-    camera: [0.8, 1.42, 0.1],
-    target: [2, 1.42, 0.1],
-    marker: [1.84, 1.42, 0.1],
+    camera: [1.05, 1.68, -0.3],
+    target: [2.5, 1.68, -0.3],
+    marker: [2.32, 1.68, -0.3],
     panel: 'stack',
   },
   {
     id: 'trayectoria',
     label: 'Trayectoria',
-    camera: [-0.85, 1.25, 0.3],
-    target: [-2, 1.1, 0.3],
-    marker: [-1.64, 1.25, 0.3],
+    camera: [-1.35, 1.28, -0.15],
+    target: [-2.5, 1.1, -0.15],
+    marker: [-2.14, 1.28, -0.15],
     panel: 'trayectoria',
   },
 ]

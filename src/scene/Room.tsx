@@ -2,9 +2,17 @@ import { BackSide } from 'three'
 
 /** Medidas del cuarto en metros. Escala real (SPEC §15). */
 export const ROOM = {
-  width: 4, // x: -2 (oeste) .. +2 (este)
-  height: 2.5, // y: 0 (piso) .. 2,5 (techo)
-  depth: 3.5, // z: -1,75 (norte) .. +1,75 (sur)
+  width: 5, // x: -2,5 (oeste) .. +2,5 (este)
+  height: 2.7, // y: 0 (piso) .. 2,7 (techo)
+  depth: 4.4, // z: -2,2 (norte) .. +2,2 (sur)
+} as const
+
+/** Posición de cada pared, para no repetir la cuenta en cada objeto */
+export const WALL = {
+  north: -ROOM.depth / 2,
+  south: ROOM.depth / 2,
+  west: -ROOM.width / 2,
+  east: ROOM.width / 2,
 } as const
 
 const SKIRTING_HEIGHT = 0.1

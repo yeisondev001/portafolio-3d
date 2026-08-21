@@ -37,6 +37,13 @@ Todo con formas primitivas (cajas y planos). **Sin modelos, sin texturas.**
 - [x] Iluminación provisional. Ya imita el esquema nocturno de SPEC §15.
 - [x] Cajas marcando cada objeto: escritorio, monitor, celular, carpeta, silla,
       velador, pizarra, estantería, pared de diplomas, cartel, puerta
+- [x] Segunda pasada de composición: bordes redondeados, sombras de contacto,
+      objetos en ángulo, materiales diferenciados
+- [x] Cuarto ampliado a 5 × 2,7 × 4,4 m
+- [x] Que parezca un cuarto y no una oficina: cama, mesa de luz, campera,
+      zapatillas, cables, corcho con post-its, reloj con la hora real
+- [x] Secuencia de entrada: el autor está de espaldas y gira la silla (SPEC §3)
+- [ ] Objetos personales del autor (instrumento, consola, mascota, ciudad)
 
 ### Navegación
 - [x] `src/data/hotspots.ts` con los 6 puntos (SPEC §3)

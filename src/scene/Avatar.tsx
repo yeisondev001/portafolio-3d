@@ -55,7 +55,7 @@ type Props = {
   rotation?: [number, number, number]
 }
 
-export function Avatar({ position = [0.72, 0, -0.85], rotation = [0, 0, 0] }: Props) {
+export function Avatar({ position = [0, 0, 0], rotation = [0, 0, 0] }: Props) {
   const { scene } = useGLTF(MODEL, DRACO_PATH)
   const invalidate = useThree((s) => s.invalidate)
   const camera = useThree((s) => s.camera)

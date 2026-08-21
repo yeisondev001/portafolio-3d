@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import { ContactShadows } from '@react-three/drei'
 import { HOTSPOTS, ENTRADA } from '../data/hotspots'
 import { Room } from './Room'
-import { Avatar } from './Avatar'
+import { Workstation } from './Workstation'
 import { Props } from './props/Props'
 import { CameraRig } from './CameraRig'
 import { Hotspot } from './Hotspot'
@@ -45,7 +45,7 @@ export function Scene() {
 
       {/* Plafón del techo: la luz general del cuarto */}
       <pointLight
-        position={[0, 2.35, -0.2]}
+        position={[0, 2.55, -0.3]}
         intensity={LIGHTS.ceiling}
         distance={8}
         decay={2}
@@ -54,7 +54,7 @@ export function Scene() {
 
       {/* Velador: el acento cálido sobre el escritorio */}
       <pointLight
-        position={[0.65, 1.12, -1.45]}
+        position={[-1.36, 1.12, -1.9]}
         intensity={LIGHTS.lamp}
         distance={5}
         decay={2}
@@ -63,7 +63,7 @@ export function Scene() {
 
       {/* Monitor: luz fría que le pega al avatar en la cara y el pecho */}
       <pointLight
-        position={[-0.2, 1.05, -1.2]}
+        position={[-0.62, 1.05, -1.72]}
         intensity={LIGHTS.monitor}
         distance={3.5}
         decay={2}
@@ -86,7 +86,7 @@ export function Scene() {
       */}
       <ContactShadows
         position={[0, 0.012, 0]}
-        scale={7}
+        scale={9}
         resolution={1024}
         blur={2.2}
         opacity={0.62}
@@ -95,10 +95,9 @@ export function Scene() {
         color="#1b1410"
       />
 
-      {/* De pie junto a la silla, mirando a la puerta, hasta que lleguen
-          las animaciones de Mixamo (fase 4) */}
+      {/* Silla giratoria con el autor: entra trabajando y se da vuelta (Workstation.tsx) */}
       <Suspense fallback={null}>
-        <Avatar position={[0.62, 0, -0.9]} rotation={[0, 0.22, 0]} />
+        <Workstation />
       </Suspense>
       <CameraRig />
 

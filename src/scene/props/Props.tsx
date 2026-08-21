@@ -1,17 +1,22 @@
 /**
- * Muebles provisionales del cuarto. Siguen siendo cajas, pero con bordes
- * redondeados, materiales diferenciados y algo de desorden.
+ * Muebles y objetos del cuarto. Siguen siendo cajas, pero con bordes
+ * redondeados, materiales diferenciados y desorden.
  * Se reemplazan por modelos de Blender en la fase 5.
  *
  * Las posiciones están en metros y deben coincidir con los puntos de
  * `src/data/hotspots.ts`. Si se mueve un mueble, revisar su hotspot.
  *
- * Tres reglas de composición, por lo aprendido en la primera prueba:
+ * Reglas de composición, por lo aprendido en las primeras pruebas:
  *  1. Nada perfectamente paralelo a las paredes: un par de grados alcanzan.
  *  2. Objetos a distintas alturas, no todos a la altura del escritorio.
  *  3. Huecos. El espacio vacío es lo que hace que un cuarto se sienta amplio.
+ *  4. Esto es un CUARTO, no una oficina: tiene que haber dónde dormir.
+ *  5. Lo específico gana a lo realista. Un cuarto genérico bien modelado no
+ *     dice nada; uno imperfecto con las cosas del autor dice todo.
  */
 import { RoundedBox } from '@react-three/drei'
+import { Cables } from './Cables'
+import { Clock } from './Clock'
 
 const WOOD = '#7d6247'
 const WOOD_DARK = '#5b4630'
@@ -23,6 +28,9 @@ const LAMP = '#e8bd77'
 const FABRIC = '#6b5f52'
 const PLANT = '#4a6340'
 const CERAMIC = '#b8ada0'
+const SHEETS = '#9c8f7e'
+const BLANKET = '#6a5d6e'
+const CORK = '#a8845a'
 
 type PieceProps = {
   position: [number, number, number]
@@ -39,7 +47,7 @@ type PieceProps = {
  * un bisel de pocos milímetros atrapa la luz y el objeto deja de leerse
  * como un cubo de CAD.
  */
-function Piece({
+export function Piece({
   position,
   size,
   rotation,
@@ -61,7 +69,7 @@ function Piece({
   )
 }
 
-/** Marco con lámina adentro: diplomas, pizarra, pósters */
+/** Marco con lámina adentro: diplomas, pizarra, pósters, fotos */
 function Framed({
   position,
   size,
@@ -98,7 +106,7 @@ function Desk() {
   ]
 
   return (
-    <group position={[-0.62, 0, -1.42]}>
+    <group position={[-0.62, 0, -1.87]}>
       <Piece position={[0, 0.735, 0]} size={[1.75, 0.045, 0.62]} radius={0.016} />
       {legs.map(([x, z]) => (
         <Piece
@@ -109,16 +117,16 @@ function Desk() {
           radius={0.008}
         />
       ))}
-      {/* Travesaño trasero, para que las patas no queden sueltas */}
       <Piece position={[0, 0.6, -0.24]} size={[1.62, 0.09, 0.03]} color={WOOD_DARK} radius={0.006} />
     </group>
   )
 }
 
-/** Silla girada: el ángulo es lo que rompe la cuadrícula */
-function Chair() {
+/** Silla girada, con una campera colgada del respaldo */
+export function Chair() {
+  // Sin posición propia: la ubica y la hace girar Workstation.tsx
   return (
-    <group position={[0.62, 0, -0.92]} rotation={[0, 0.22, 0]}>
+    <group>
       <Piece position={[0, 0.45, 0]} size={[0.46, 0.07, 0.46]} color={FABRIC} radius={0.02} />
       <Piece
         position={[0, 0.74, -0.21]}
@@ -127,13 +135,7 @@ function Chair() {
         color={FABRIC}
         radius={0.02}
       />
-      <Piece
-        position={[0, 0.22, 0]}
-        size={[0.07, 0.46, 0.07]}
-        color={METAL}
-        roughness={0.4}
-        metalness={0.6}
-      />
+      <Piece position={[0, 0.22, 0]} size={[0.07, 0.46, 0.07]} color={METAL} roughness={0.4} metalness={0.6} />
       <Piece
         position={[0, 0.03, 0]}
         size={[0.44, 0.04, 0.44]}
@@ -142,6 +144,86 @@ function Chair() {
         metalness={0.6}
         radius={0.02}
       />
+
+      {/* Campera colgada del respaldo, caída hacia un lado */}
+      <group position={[-0.06, 0.72, -0.26]} rotation={[0.1, 0, -0.08]}>
+        <Piece position={[0, 0, 0]} size={[0.36, 0.46, 0.07]} color="#4a4a55" roughness={1} radius={0.03} />
+        <Piece
+          position={[-0.14, -0.2, 0.01]}
+          rotation={[0, 0, 0.22]}
+          size={[0.1, 0.3, 0.06]}
+          color="#43434e"
+          roughness={1}
+          radius={0.03}
+        />
+      </group>
+    </group>
+  )
+}
+
+/**
+ * La cama. Es lo que convierte una oficina en un cuarto.
+ * Deshecha a propósito: una cama tendida se ve a showroom.
+ */
+function Bed() {
+  return (
+    <group position={[1.88, 0, 0.55]}>
+      {/* Estructura y colchón */}
+      <Piece position={[0, 0.16, 0]} size={[1.02, 0.28, 1.98]} color={WOOD_DARK} radius={0.02} />
+      <Piece position={[0, 0.37, 0]} size={[0.98, 0.2, 1.94]} color={SHEETS} roughness={1} radius={0.04} />
+      {/* Respaldo, contra el norte */}
+      <Piece position={[0, 0.62, -1.0]} size={[1.04, 0.72, 0.07]} color={WOOD_DARK} radius={0.02} />
+
+      {/* Manta arrugada, corrida hacia los pies y torcida */}
+      <Piece
+        position={[0.04, 0.5, 0.34]}
+        rotation={[0, 0.07, 0]}
+        size={[0.96, 0.1, 1.1]}
+        color={BLANKET}
+        roughness={1}
+        radius={0.05}
+      />
+      <Piece
+        position={[-0.16, 0.55, 0.62]}
+        rotation={[0.12, -0.3, 0.05]}
+        size={[0.5, 0.09, 0.42]}
+        color={BLANKET}
+        roughness={1}
+        radius={0.05}
+      />
+
+      {/* Almohadas, una más caída que la otra */}
+      <Piece
+        position={[-0.22, 0.53, -0.76]}
+        rotation={[0, 0.14, 0.05]}
+        size={[0.48, 0.13, 0.32]}
+        color="#c6bcab"
+        roughness={1}
+        radius={0.06}
+      />
+      <Piece
+        position={[0.25, 0.51, -0.72]}
+        rotation={[0, -0.22, -0.03]}
+        size={[0.46, 0.11, 0.3]}
+        color="#bdb2a1"
+        roughness={1}
+        radius={0.06}
+      />
+    </group>
+  )
+}
+
+/** Mesa de luz con una foto y un vaso */
+function Nightstand() {
+  return (
+    <group position={[2.22, 0, -0.72]} rotation={[0, -0.12, 0]}>
+      <Piece position={[0, 0.26, 0]} size={[0.42, 0.52, 0.4]} color={WOOD} radius={0.014} />
+      <Piece position={[0, 0.36, 0.19]} size={[0.36, 0.14, 0.03]} color={WOOD_DARK} radius={0.006} />
+
+      {/* Foto de tu vida fuera del código: humaniza más que cualquier texto */}
+      <Framed position={[-0.09, 0.63, 0.02]} size={[0.17, 0.21, 0.02]} rotation={[0, 0.35, 0]} inner="#7d8b74" />
+      {/* Vaso */}
+      <Piece position={[0.12, 0.58, 0.06]} size={[0.07, 0.11, 0.07]} color="#aab7bd" roughness={0.15} radius={0.03} />
     </group>
   )
 }
@@ -159,12 +241,11 @@ const BOOKS = [
 
 function Bookshelf() {
   return (
-    <group position={[-1.84, 0, 0.3]}>
+    <group position={[-2.34, 0, -0.15]}>
       <Piece position={[0, 1.0, 0]} size={[0.3, 2.0, 1.0]} color={WOOD_DARK} radius={0.014} />
       {[0.42, 0.86, 1.3, 1.74].map((y) => (
         <Piece key={y} position={[0.02, y, 0]} size={[0.28, 0.026, 0.96]} radius={0.006} />
       ))}
-      {/* Libros a distintas alturas, algunos inclinados */}
       {BOOKS.map((book) => (
         <Piece
           key={`${book.z}-${book.y}`}
@@ -176,6 +257,8 @@ function Bookshelf() {
           radius={0.004}
         />
       ))}
+      {/* Foto apoyada en un estante */}
+      <Framed position={[0.06, 1.46, 0.3]} size={[0.15, 0.19, 0.02]} rotation={[0, 0.2, 0]} inner="#8b7f6d" />
     </group>
   )
 }
@@ -187,37 +270,60 @@ const CERTS = [
   { x: 0.98, y: 1.28, w: 0.28, h: 0.36 },
 ]
 
+/** Post-its del corcho: en qué está trabajando ahora */
+const NOTES = [
+  { x: -0.2, y: 0.14, color: '#d9c56a', tilt: 0.08 },
+  { x: 0.02, y: 0.17, color: '#8fbf83', tilt: -0.12 },
+  { x: 0.22, y: 0.1, color: '#d99b7a', tilt: 0.05 },
+  { x: -0.14, y: -0.11, color: '#8fb2c9', tilt: -0.06 },
+  { x: 0.14, y: -0.14, color: '#d9c56a', tilt: 0.14 },
+]
+
+/**
+ * Corcho con post-its. Es lo que más rápido comunica que estás activo,
+ * y se actualiza editando un array.
+ */
+function Corkboard() {
+  return (
+    <group position={[-1.62, 1.55, -2.16]}>
+      <Piece position={[0, 0, 0]} size={[0.72, 0.56, 0.03]} color={FRAME} radius={0.008} />
+      <Piece position={[0, 0, 0.014]} size={[0.66, 0.5, 0.02]} color={CORK} roughness={1} radius={0.004} />
+      {NOTES.map((note) => (
+        <Piece
+          key={`${note.x}-${note.y}`}
+          position={[note.x, note.y, 0.028]}
+          rotation={[0, 0, note.tilt]}
+          size={[0.13, 0.13, 0.006]}
+          color={note.color}
+          roughness={1}
+          radius={0.003}
+        />
+      ))}
+    </group>
+  )
+}
+
 export function Props() {
   return (
     <group>
       <Desk />
-      <Chair />
       <Bookshelf />
+      <Bed />
+      <Nightstand />
+      <Corkboard />
+      <Cables />
+      <Clock position={[1.9, 2.24, -2.16]} />
 
       {/* ── Sobre el escritorio ── */}
-      {/* Monitor, apenas girado hacia la silla */}
-      <group position={[-0.62, 0, -1.5]} rotation={[0, -0.13, 0]}>
-        <Piece
-          position={[0, 0.79, 0]}
-          size={[0.2, 0.02, 0.14]}
-          color={METAL}
-          roughness={0.4}
-          metalness={0.5}
-        />
-        <Piece
-          position={[0, 0.87, 0]}
-          size={[0.05, 0.16, 0.05]}
-          color={METAL}
-          roughness={0.4}
-          metalness={0.5}
-        />
+      <group position={[-0.62, 0, -1.95]} rotation={[0, -0.13, 0]}>
+        <Piece position={[0, 0.79, 0]} size={[0.2, 0.02, 0.14]} color={METAL} roughness={0.4} metalness={0.5} />
+        <Piece position={[0, 0.87, 0]} size={[0.05, 0.16, 0.05]} color={METAL} roughness={0.4} metalness={0.5} />
         <Piece position={[0, 1.08, 0]} size={[0.6, 0.36, 0.022]} color={METAL} roughness={0.5} radius={0.008} />
         <Piece position={[0, 1.08, 0.014]} size={[0.57, 0.33, 0.01]} color={SCREEN} roughness={0.15} radius={0.003} />
       </group>
 
-      {/* Teclado, girado igual que el monitor */}
       <Piece
-        position={[-0.62, 0.768, -1.25]}
+        position={[-0.62, 0.768, -1.7]}
         rotation={[0, -0.13, 0]}
         size={[0.42, 0.018, 0.14]}
         color={METAL}
@@ -226,7 +332,7 @@ export function Props() {
       />
 
       {/* Velador: la fuente cálida dominante */}
-      <group position={[-1.36, 0, -1.5]}>
+      <group position={[-1.36, 0, -1.95]}>
         <Piece
           position={[0, 0.775, 0]}
           size={[0.16, 0.025, 0.16]}
@@ -235,19 +341,13 @@ export function Props() {
           metalness={0.5}
           radius={0.01}
         />
-        <Piece
-          position={[0, 0.9, 0]}
-          size={[0.028, 0.25, 0.028]}
-          color={METAL}
-          roughness={0.4}
-          metalness={0.5}
-        />
+        <Piece position={[0, 0.9, 0]} size={[0.028, 0.25, 0.028]} color={METAL} roughness={0.4} metalness={0.5} />
         <Piece position={[0, 1.05, 0]} size={[0.2, 0.15, 0.2]} color={LAMP} roughness={0.9} radius={0.02} />
       </group>
 
       {/* Celular: el contacto */}
       <Piece
-        position={[-0.05, 0.767, -1.32]}
+        position={[-0.05, 0.767, -1.77]}
         rotation={[0, 0.5, 0]}
         size={[0.072, 0.011, 0.15]}
         color={METAL}
@@ -257,7 +357,7 @@ export function Props() {
 
       {/* Carpeta: la descarga del CV. Torcida, como quedan las carpetas */}
       <Piece
-        position={[-0.15, 0.775, -1.58]}
+        position={[-0.15, 0.775, -2.03]}
         rotation={[0, -0.28, 0]}
         size={[0.23, 0.035, 0.31]}
         color={PAPER}
@@ -265,15 +365,15 @@ export function Props() {
         radius={0.006}
       />
 
-      {/* Taza: el objeto que dice que acá vive alguien */}
-      <group position={[0.02, 0, -1.5]}>
+      {/* Taza */}
+      <group position={[0.02, 0, -1.95]}>
         <Piece position={[0, 0.8, 0]} size={[0.082, 0.095, 0.082]} color={CERAMIC} roughness={0.35} radius={0.03} />
         <Piece position={[0.055, 0.805, 0]} size={[0.022, 0.055, 0.02]} color={CERAMIC} roughness={0.35} radius={0.01} />
       </group>
 
       {/* Papelera bajo el escritorio */}
       <Piece
-        position={[0.18, 0.14, -1.42]}
+        position={[0.18, 0.14, -1.87]}
         size={[0.22, 0.28, 0.22]}
         color={METAL}
         roughness={0.6}
@@ -281,32 +381,50 @@ export function Props() {
         radius={0.02}
       />
 
+      {/* Zapatillas tiradas al pie de la cama, cada una a su aire */}
+      <Piece
+        position={[1.15, 0.05, 1.72]}
+        rotation={[0, 0.6, 0]}
+        size={[0.11, 0.1, 0.28]}
+        color="#5a5b60"
+        roughness={1}
+        radius={0.03}
+      />
+      <Piece
+        position={[0.98, 0.05, 1.58]}
+        rotation={[0, -0.25, 0.06]}
+        size={[0.11, 0.1, 0.28]}
+        color="#5a5b60"
+        roughness={1}
+        radius={0.03}
+      />
+
       {/* ── Certificaciones: escalonadas, no en fila ── */}
       {CERTS.map((cert) => (
-        <Framed key={`${cert.x}-${cert.y}`} position={[cert.x, cert.y, -1.72]} size={[cert.w, cert.h, 0.028]} />
+        <Framed key={`${cert.x}-${cert.y}`} position={[cert.x, cert.y, -2.17]} size={[cert.w, cert.h, 0.028]} />
       ))}
 
       {/* Cartel con nombre y rol, arriba del escritorio */}
-      <Framed position={[-0.62, 2.05, -1.72]} size={[0.95, 0.2, 0.03]} inner="#d9d2c4" />
+      <Framed position={[-0.62, 2.22, -2.17]} size={[0.95, 0.2, 0.03]} inner="#d9d2c4" />
 
-      {/* ── Pizarra del stack: pared este ── */}
+      {/* ── Pizarra del stack: pared este, arriba de la cama ── */}
       <Framed
-        position={[1.94, 1.42, 0.1]}
-        size={[1.15, 0.82, 0.035]}
+        position={[2.44, 1.68, -0.3]}
+        size={[1.0, 0.72, 0.035]}
         rotation={[0, -Math.PI / 2, 0]}
         inner="#dcd8ce"
       />
 
       {/* Póster sobre la estantería: pared oeste, apenas torcido */}
       <Framed
-        position={[-1.94, 1.62, 1.05]}
+        position={[-2.44, 1.72, 1.1]}
         size={[0.62, 0.85, 0.028]}
         rotation={[0, Math.PI / 2, 0.02]}
         inner="#8c6b5a"
       />
 
-      {/* ── Planta en el rincón: otra altura, formas orgánicas ── */}
-      <group position={[1.6, 0, 1.15]}>
+      {/* ── Planta en el rincón sur ── */}
+      <group position={[-2.1, 0, 1.85]}>
         <Piece position={[0, 0.16, 0]} size={[0.26, 0.32, 0.26]} color={CERAMIC} roughness={0.8} radius={0.03} />
         <Piece position={[0, 0.55, 0]} size={[0.05, 0.5, 0.05]} color="#4a5a3c" radius={0.02} />
         <Piece
@@ -333,13 +451,13 @@ export function Props() {
       </group>
 
       {/* ── Alfombra girada: lo que más rompe la cuadrícula del piso ── */}
-      <mesh position={[-0.15, 0.006, -0.35]} rotation={[-Math.PI / 2, 0, 0.14]}>
-        <planeGeometry args={[2.3, 1.7]} />
+      <mesh position={[-0.5, 0.006, -0.35]} rotation={[-Math.PI / 2, 0, 0.14]}>
+        <planeGeometry args={[2.5, 2.0]} />
         <meshStandardMaterial color="#5c4f45" roughness={1} />
       </mesh>
 
       {/* ── Puerta: pared sur ── */}
-      <group position={[0, 0, 1.72]}>
+      <group position={[-0.85, 0, 2.17]}>
         <Piece position={[0, 1.03, 0]} size={[0.92, 2.06, 0.05]} color={WOOD_DARK} radius={0.01} />
         <Piece position={[0, 1.03, -0.02]} size={[0.84, 1.98, 0.03]} color="#6a563e" radius={0.008} />
         <Piece

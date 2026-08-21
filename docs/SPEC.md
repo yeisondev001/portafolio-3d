@@ -8,6 +8,7 @@
 ## 1. Concepto
 
 Un portafolio personal donde el visitante entra a una recreación 3D del cuarto del autor.
+El cuarto mide **5 × 2,7 × 4,4 m**.
 Dentro del cuarto hay un avatar del autor, y el contenido real del portafolio
 (proyectos, certificaciones, tecnologías, CV, contacto) está distribuido en objetos
 del espacio.
@@ -64,7 +65,7 @@ hace clic (o lo toca en el celular) y **la cámara se desliza suavemente** hasta
 | # | Punto | Objeto | Qué muestra |
 |---|---|---|---|
 | 0 | **Carga** | 🚪 Puerta cerrada | Es la pantalla de carga. Al terminar, se abre. |
-| ① | **Entrada** | Cartel en la pared | Nombre y rol. Vista general. El avatar saluda. |
+| ① | **Entrada** | Cartel en la pared | Nombre y rol. Vista general. Ver la secuencia de entrada abajo. |
 | ② | **Avatar** | 👤 Avatar en la silla | Panel **Sobre mí**, que incluye disponibilidad. Ver §14. |
 | ③ | **Escritorio** | 🖥️ 📱 📄 | Tres objetos clickeables desde una sola posición. Ver abajo. |
 | ④ | **Certificaciones** | 🖼️ Pared norte | Diplomas como cuadros. Clic en uno lo agranda. |
@@ -76,6 +77,24 @@ hace clic (o lo toca en el celular) y **la cámara se desliza suavemente** hasta
 - La luz pasa a ser nocturna: velador del escritorio + brillo del monitor (ver §15).
 - La disponibilidad pierde su objeto y se fusiona con el panel Sobre mí.
 - Quedan **6 puntos de interés**, no 7.
+
+### La secuencia de entrada
+
+La primera impresión del sitio, en orden:
+
+1. La puerta cerrada mientras carga.
+2. Se abre. El autor está **de espaldas**, trabajando frente al escritorio.
+3. **Gira la silla** y queda mirando a quien entró.
+4. Le hace la seña de que se acerque.
+
+Por qué así y no con el avatar ya mirando a la puerta: que esté de espaldas
+y se dé vuelta implica que **el visitante lo interrumpió**. Eso convierte al
+visitante en alguien que llega a un lugar donde ya pasaban cosas, en vez de
+alguien que mira una escena montada para él.
+
+Implementación: silla y avatar giran juntos como un solo grupo
+(`src/scene/Workstation.tsx`). Girar el grupo entero no es un atajo — una
+silla de escritorio gira de verdad.
 
 ### El escritorio — tres objetos, una posición de cámara
 
