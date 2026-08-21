@@ -7,6 +7,22 @@ import { Props } from './props/Props'
 import { CameraRig } from './CameraRig'
 import { Hotspot } from './Hotspot'
 
+/**
+ * Intensidades de las luces provisionales, todas juntas para poder ajustarlas
+ * de un vistazo. Se reemplazan por luz horneada en la fase 5 (CLAUDE.md regla 3).
+ *
+ * La escena es nocturna (SPEC §15): el plafón da la luz general, el velador
+ * pone el acento cálido sobre el escritorio y el monitor tira frío sobre el
+ * avatar. Subir `ambient` aplana todo, así que conviene tocar antes `ceiling`.
+ */
+const LIGHTS = {
+  ambient: 0.34,
+  ceiling: 11,
+  lamp: 13,
+  monitor: 5,
+  fill: 0.42,
+} as const
+
 /** En celular se baja el techo de resolución para no calentar el equipo (SPEC §7.4) */
 const isTouch =
   typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
@@ -24,30 +40,37 @@ export function Scene() {
         en la fase 5 (CLAUDE.md regla 3). Ya imitan el esquema nocturno
         de SPEC §15: velador cálido dominante + monitor frío sobre el avatar.
       */}
-      {/* Ambiente casi nulo: el cuarto es de noche y todo lo que se ve
-          tiene que venir del velador o del monitor (SPEC §15) */}
-      <ambientLight intensity={0.12} />
+      <ambientLight intensity={LIGHTS.ambient} />
 
-      {/* Velador: fuente cálida dominante */}
+      {/* Plafón del techo: la luz general del cuarto */}
+      <pointLight
+        position={[0, 2.35, -0.2]}
+        intensity={LIGHTS.ceiling}
+        distance={8}
+        decay={2}
+        color="#ffd9ab"
+      />
+
+      {/* Velador: el acento cálido sobre el escritorio */}
       <pointLight
         position={[0.65, 1.12, -1.45]}
-        intensity={9}
-        distance={4.5}
+        intensity={LIGHTS.lamp}
+        distance={5}
         decay={2}
         color="#ffbe72"
       />
 
       {/* Monitor: luz fría que le pega al avatar en la cara y el pecho */}
       <pointLight
-        position={[-0.2, 1.05, -1.25]}
-        intensity={3.5}
-        distance={3}
+        position={[-0.2, 1.05, -1.2]}
+        intensity={LIGHTS.monitor}
+        distance={3.5}
         decay={2}
         color="#9ec3ff"
       />
 
-      {/* Relleno mínimo para que los rincones no queden en negro puro */}
-      <hemisphereLight args={['#5b6472', '#191512', 0.3]} />
+      {/* Relleno para que los rincones no queden en negro puro */}
+      <hemisphereLight args={['#7d8899', '#2a231d', LIGHTS.fill]} />
 
       <Room />
       <Props />

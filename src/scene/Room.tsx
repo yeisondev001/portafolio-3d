@@ -13,13 +13,13 @@ export function Room() {
       {/* Una caja invertida resuelve paredes, piso y techo en un solo draw call */}
       <mesh position={[0, ROOM.height / 2, 0]}>
         <boxGeometry args={[ROOM.width, ROOM.height, ROOM.depth]} />
-        <meshStandardMaterial color="#6d655c" side={BackSide} roughness={1} />
+        <meshStandardMaterial color="#8a8073" side={BackSide} roughness={1} />
       </mesh>
 
       {/* Piso aparte, más oscuro, para que se lea la profundidad */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, 0]}>
         <planeGeometry args={[ROOM.width, ROOM.depth]} />
-        <meshStandardMaterial color="#37312c" roughness={1} />
+        <meshStandardMaterial color="#4b423a" roughness={1} />
       </mesh>
     </group>
   )
