@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
+import { ContactShadows } from '@react-three/drei'
 import { HOTSPOTS, ENTRADA } from '../data/hotspots'
 import { Room } from './Room'
 import { Avatar } from './Avatar'
@@ -75,10 +76,29 @@ export function Scene() {
       <Room />
       <Props />
 
+      {/*
+        Sombras de contacto: la mancha oscura donde cada mueble toca el piso.
+        Sin esto todo parece flotar (SPEC §15).
+
+        frames={1} las calcula una sola vez y las deja fijas, en vez de
+        recalcularlas en cada cuadro. Son estáticas, pero el cuarto tampoco
+        se mueve, y sale gratis.
+      */}
+      <ContactShadows
+        position={[0, 0.012, 0]}
+        scale={7}
+        resolution={1024}
+        blur={2.2}
+        opacity={0.62}
+        far={2.4}
+        frames={1}
+        color="#1b1410"
+      />
+
       {/* De pie junto a la silla, mirando a la puerta, hasta que lleguen
           las animaciones de Mixamo (fase 4) */}
       <Suspense fallback={null}>
-        <Avatar position={[0.72, 0, -0.9]} rotation={[0, 0.15, 0]} />
+        <Avatar position={[0.62, 0, -0.9]} rotation={[0, 0.22, 0]} />
       </Suspense>
       <CameraRig />
 

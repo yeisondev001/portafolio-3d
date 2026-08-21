@@ -15,7 +15,7 @@ const DRACO_PATH = '/draco/'
 
 /** Cuánto puede girar la cabeza siguiendo a la cámara, en radianes */
 const HEAD_YAW_LIMIT = 0.6
-const HEAD_PITCH_LIMIT = 0.35
+const HEAD_PITCH_LIMIT = 0.2
 /** Qué tan rápido alcanza la cabeza su objetivo (0-1 por frame) */
 const HEAD_EASE = 0.12
 /** Segundos que tarda el cruce entre dos animaciones */
