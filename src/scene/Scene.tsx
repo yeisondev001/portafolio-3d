@@ -24,16 +24,38 @@ export function Scene() {
         en la fase 5 (CLAUDE.md regla 3). Ya imitan el esquema nocturno
         de SPEC §15: velador cálido dominante + monitor frío sobre el avatar.
       */}
-      <ambientLight intensity={0.5} />
-      <pointLight position={[0.65, 1.15, -1.45]} intensity={7} distance={6} color="#ffcf94" />
-      <pointLight position={[-0.2, 1.1, -1.35]} intensity={3} distance={3.5} color="#9fc4ff" />
+      {/* Ambiente casi nulo: el cuarto es de noche y todo lo que se ve
+          tiene que venir del velador o del monitor (SPEC §15) */}
+      <ambientLight intensity={0.12} />
+
+      {/* Velador: fuente cálida dominante */}
+      <pointLight
+        position={[0.65, 1.12, -1.45]}
+        intensity={9}
+        distance={4.5}
+        decay={2}
+        color="#ffbe72"
+      />
+
+      {/* Monitor: luz fría que le pega al avatar en la cara y el pecho */}
+      <pointLight
+        position={[-0.2, 1.05, -1.25]}
+        intensity={3.5}
+        distance={3}
+        decay={2}
+        color="#9ec3ff"
+      />
+
+      {/* Relleno mínimo para que los rincones no queden en negro puro */}
+      <hemisphereLight args={['#5b6472', '#191512', 0.3]} />
 
       <Room />
       <Props />
 
-      {/* De pie al lado de la silla hasta que lleguen las animaciones de Mixamo */}
+      {/* De pie junto a la silla, mirando a la puerta, hasta que lleguen
+          las animaciones de Mixamo (fase 4) */}
       <Suspense fallback={null}>
-        <Avatar position={[0.72, 0, -0.55]} rotation={[0, Math.PI, 0]} />
+        <Avatar position={[0.72, 0, -0.9]} rotation={[0, 0.15, 0]} />
       </Suspense>
       <CameraRig />
 
