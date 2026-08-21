@@ -4,6 +4,12 @@ import { useGLTF } from '@react-three/drei'
 import { Bone, Euler, Object3D, Quaternion, Vector3 } from 'three'
 
 const MODEL = '/models/avatar.glb'
+/**
+ * El modelo viene comprimido con Draco (4,3 MB → 0,7 MB). El decodificador
+ * se sirve desde /public/draco en vez del CDN de Google: sin dependencias
+ * de terceros y funciona sin conexión.
+ */
+const DRACO_PATH = '/draco/' 
 
 /**
  * Pose de reposo provisional. El avatar viene en T-Pose (brazos extendidos),
@@ -39,7 +45,7 @@ type Props = {
 }
 
 export function Avatar({ position = [0.72, 0, -0.7], rotation = [0, 0, 0] }: Props) {
-  const { scene } = useGLTF(MODEL)
+  const { scene } = useGLTF(MODEL, DRACO_PATH)
   const invalidate = useThree((s) => s.invalidate)
   const camera = useThree((s) => s.camera)
 
@@ -106,4 +112,4 @@ export function Avatar({ position = [0.72, 0, -0.7], rotation = [0, 0, 0] }: Pro
   return <primitive ref={root} object={model} position={position} rotation={rotation} />
 }
 
-useGLTF.preload(MODEL)
+useGLTF.preload(MODEL, DRACO_PATH)
