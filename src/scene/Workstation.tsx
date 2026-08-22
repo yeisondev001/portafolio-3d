@@ -3,6 +3,7 @@ import { useFrame, useThree } from '@react-three/fiber'
 import type { Group } from 'three'
 import { Avatar } from './Avatar'
 import { Chair } from './props/Props'
+import { useStore } from '../store/useStore'
 
 /**
  * La silla giratoria con el autor sentado.
@@ -35,6 +36,7 @@ function ease(t: number): number {
 export function Workstation() {
   const group = useRef<Group>(null)
   const invalidate = useThree((s) => s.invalidate)
+  const startGreeting = useStore((s) => s.startGreeting)
   const elapsed = useRef(0)
   const done = useRef(false)
 
@@ -48,6 +50,8 @@ export function Workstation() {
 
     if (progress >= 1) {
       done.current = true
+      // Terminó de darse vuelta: recién ahí hace la seña de que se acerquen
+      startGreeting()
       return
     }
     invalidate()

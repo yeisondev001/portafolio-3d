@@ -81,6 +81,52 @@ for (const file of fs.readdirSync(INPUT_DIR).filter((f) => f.endsWith('.fbx'))) 
   )
 }
 
+/**
+ * Los gestos de Mixamo son de pie y los clips sentados no mueven los brazos
+ * (SPEC §14). La salida es armar un clip nuevo: piernas y cadera de uno,
+ * torso y brazos del otro.
+ *
+ * Las piernas se congelan en su primer fotograma sentado y se estiran a lo
+ * largo del gesto, así el avatar queda sentado moviendo los brazos.
+ */
+const LOWER_BODY = new Set([
+  'Hips',
+  'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase',
+  'RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase',
+])
+
+function combinar(nombre, base, gesto) {
+  if (!clips[base] || !clips[gesto]) return
+
+  const duracion = clips[gesto].duration
+  const tracks = []
+
+  // Tren superior: el gesto, tal cual
+  for (const track of clips[gesto].tracks) {
+    if (!LOWER_BODY.has(track.name.split('.')[0])) tracks.push(track)
+  }
+
+  // Tren inferior: la pose sentada, congelada
+  for (const track of clips[base].tracks) {
+    if (!LOWER_BODY.has(track.name.split('.')[0])) continue
+    const salto = track.values.length / track.times.length
+    const primero = track.values.slice(0, salto)
+    tracks.push({
+      ...track,
+      times: [0, duracion],
+      values: [...primero, ...primero],
+    })
+  }
+
+  clips[nombre] = { ...clips[gesto], name: nombre, tracks }
+  console.log(`  ${nombre.padEnd(18)} ${duracion.toFixed(2)}s  ${tracks.length} pistas  (combinado)`)
+}
+
+combinar('sitting-beckoning', 'sitting', 'beckoning')
+
+// El gesto de pie ya cumplió su papel de ingrediente: no se manda al navegador
+delete clips.beckoning
+
 fs.writeFileSync(OUTPUT, JSON.stringify(clips))
 console.log('---')
 console.log(`${OUTPUT}  ${(fs.statSync(OUTPUT).size / 1024).toFixed(0)} KB`)

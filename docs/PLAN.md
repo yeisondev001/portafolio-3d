@@ -74,8 +74,11 @@ trabajo fino vaya en la fase 4. Objetivo: confirmar que el efecto funciona, no p
       igual, así que el AnimationMixer los une por nombre. Un script convierte
       los `.fbx` a JSON (`scripts/convertir-animaciones.mjs`).
 - [x] **La cabeza sigue a la cámara**
-- [ ] Falta un clip con gesto de llamar ("vení, acercate"): hoy hay `sitting`
-      y `sitting-pointing`
+- [x] Gesto de llamar resuelto. `Beckoning` de Mixamo es **de pie**, así que el
+      script arma un clip nuevo: piernas y cadera de `sitting`, torso y brazos
+      del gesto. Es la mezcla de tren superior e inferior que anticipaba SPEC §14.
+- [x] Secuencia completa: de espaldas → gira la silla → hace la seña → vuelve
+      a la pose sentada
 - [ ] Mirarlo animado dentro del cuarto y decidir si el parecido alcanza
 
 Si no alcanza, escalar según el camino de decisión de SPEC §14 **antes** de seguir.

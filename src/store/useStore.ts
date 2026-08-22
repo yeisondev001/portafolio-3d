@@ -7,8 +7,15 @@ type State = {
   active: HotspotId
   /** Panel 2D abierto encima de la escena, si hay alguno */
   panel: PanelId | null
+  /**
+   * El autor está haciendo la seña de que se acerquen.
+   * Lo dispara Workstation al terminar de girar la silla (SPEC §3).
+   */
+  greeting: boolean
   /** Viajar a un punto. Abre su panel si tiene uno asociado. */
   goTo: (id: HotspotId) => void
+  startGreeting: () => void
+  endGreeting: () => void
   openPanel: (panel: PanelId) => void
   closePanel: () => void
 }
@@ -16,12 +23,16 @@ type State = {
 export const useStore = create<State>((set) => ({
   active: 'entrada',
   panel: null,
+  greeting: false,
 
   goTo: (id) =>
     set((state) => {
       if (state.active === id) return state
       return { active: id, panel: getHotspot(id).panel }
     }),
+
+  startGreeting: () => set({ greeting: true }),
+  endGreeting: () => set({ greeting: false }),
 
   openPanel: (panel) => set({ panel }),
   closePanel: () => set({ panel: null }),

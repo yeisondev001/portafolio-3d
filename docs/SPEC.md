@@ -525,9 +525,11 @@ Flujo completo:
 **Tres gotchas conocidos:**
 
 - **Sentado + saludo a la vez es más caro que cada cosa por separado.** Los saludos de
-  Mixamo son de pie; los clips sentados no suelen mover los brazos. Combinarlos exige
-  mezclar tren superior de un clip con tren inferior de otro. Lo barato: buscar un clip
-  sentado que ya traiga gesto de brazos.
+  Mixamo son de pie; los clips sentados no suelen mover los brazos.
+  **Resuelto:** `scripts/convertir-animaciones.mjs` arma un clip nuevo mezclando los
+  dos — cadera y piernas de `sitting` congeladas en su primer fotograma, torso y
+  brazos del gesto de pie. Verificación: la cadera del clip combinado queda a 0,514 m
+  (sentado) y no a 0,723 (parado).
 - **La silla se acomoda a la animación, no al revés.** Los clips sentados asumen una
   silla imaginaria a cierta altura. Primero se elige el clip, después se mueve la silla.
   Al revés el avatar queda flotando o hundido.

@@ -1,7 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
-import { AnimationAction, AnimationClip, AnimationMixer, Bone, Euler, Quaternion, Vector3 } from 'three'
+import {
+  AnimationAction,
+  AnimationClip,
+  AnimationMixer,
+  Bone,
+  Euler,
+  LoopOnce,
+  LoopRepeat,
+  Quaternion,
+  Vector3,
+} from 'three'
 import { useStore } from '../store/useStore'
 
 const MODEL = '/models/avatar.glb'
@@ -60,6 +70,8 @@ export function Avatar({ position = [0, 0, 0], rotation = [0, 0, 0] }: Props) {
   const invalidate = useThree((s) => s.invalidate)
   const camera = useThree((s) => s.camera)
   const active = useStore((s) => s.active)
+  const greeting = useStore((s) => s.greeting)
+  const endGreeting = useStore((s) => s.endGreeting)
 
   const [ready, setReady] = useState(false)
   const mixer = useRef<AnimationMixer | null>(null)
@@ -70,8 +82,18 @@ export function Avatar({ position = [0, 0, 0], rotation = [0, 0, 0] }: Props) {
   const currentYaw = useRef(0)
   const currentPitch = useRef(0)
 
-  // Al llegar al escritorio, señala el monitor; el resto del tiempo está sentado
-  const wanted = active === 'escritorio' ? 'sitting-pointing' : 'sitting'
+  /**
+   * Qué animación corresponde ahora.
+   *
+   * `sitting-beckoning` es un clip armado: piernas sentadas de `sitting`,
+   * brazos del `Beckoning` de Mixamo, que es de pie. Ver
+   * scripts/convertir-animaciones.mjs.
+   */
+  const wanted = greeting
+    ? 'sitting-beckoning'
+    : active === 'escritorio'
+      ? 'sitting-pointing'
+      : 'sitting'
 
   useEffect(() => {
     head.current = (scene.getObjectByName('Head') as Bone) ?? null
@@ -99,10 +121,22 @@ export function Avatar({ position = [0, 0, 0], rotation = [0, 0, 0] }: Props) {
     const next = actions.current.get(wanted)
     if (!next || next === current.current) return
 
-    next.reset().fadeIn(FADE).play()
+    // La seña se hace una vez y vuelve a la pose sentada; el resto son bucles
+    const once = wanted === 'sitting-beckoning'
+    next
+      .reset()
+      .setLoop(once ? LoopOnce : LoopRepeat, Infinity)
+      .fadeIn(FADE)
+      .play()
+    next.clampWhenFinished = once
+
     current.current?.fadeOut(FADE)
     current.current = next
-  }, [ready, wanted])
+
+    if (!once) return
+    const timer = setTimeout(() => endGreeting(), (next.getClip().duration - FADE) * 1000)
+    return () => clearTimeout(timer)
+  }, [ready, wanted, endGreeting])
 
   // Pedir cuadros mientras haya animación corriendo
   useEffect(() => {
