@@ -35,5 +35,13 @@ export const useStore = create<State>((set) => ({
   endGreeting: () => set({ greeting: false }),
 
   openPanel: (panel) => set({ panel }),
-  closePanel: () => set({ panel: null }),
+  /**
+   * Cerrar un panel devuelve la cámara al punto del cuarto que le
+   * corresponde. Sin esto quedarías con la nariz pegada al monitor y sin
+   * panel, sin forma obvia de salir.
+   */
+  closePanel: () =>
+    set((state) =>
+      state.active === 'monitor' ? { panel: null, active: 'escritorio' } : { panel: null },
+    ),
 }))

@@ -1,0 +1,75 @@
+/*
+ * Estilos compartidos por todos los paneles 2D.
+ *
+ * El contenido se lee en HTML sobre el canvas, nunca dibujado en 3D
+ * (SPEC §5): texto nítido, seleccionable, con links reales y legible
+ * para buscadores y lectores de pantalla.
+ */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  background: rgb(16 13 11 / 0.82);
+  backdrop-filter: blur(6px);
+  animation: fade 0.35s ease both;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 24px calc(18px + env(safe-area-inset-top));
+  border-bottom: 1px solid rgb(255 255 255 / 0.12);
+}
+
+.title {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  opacity: 0.65;
+}
+
+.close {
+  flex-shrink: 0;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid rgb(255 255 255 / 0.28);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.06);
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus-visible {
+  background: rgb(255 255 255 / 0.18);
+}
+
+.body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  overscroll-behavior: contain;
+}
+
+.inner {
+  max-width: 1080px;
+  margin: 0 auto;
+}

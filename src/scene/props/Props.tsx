@@ -14,7 +14,9 @@
  *  5. Lo específico gana a lo realista. Un cuarto genérico bien modelado no
  *     dice nada; uno imperfecto con las cosas del autor dice todo.
  */
+import type { ThreeEvent } from '@react-three/fiber'
 import { RoundedBox } from '@react-three/drei'
+import { useStore } from '../../store/useStore'
 import { Cables } from './Cables'
 import { Clock } from './Clock'
 
@@ -40,6 +42,9 @@ type PieceProps = {
   roughness?: number
   metalness?: number
   radius?: number
+  onClick?: (event: ThreeEvent<MouseEvent>) => void
+  onPointerOver?: () => void
+  onPointerOut?: () => void
 }
 
 /**
@@ -55,6 +60,7 @@ export function Piece({
   roughness = 0.85,
   metalness = 0,
   radius = 0.012,
+  ...events
 }: PieceProps) {
   return (
     <RoundedBox
@@ -63,9 +69,42 @@ export function Piece({
       smoothness={2}
       position={position}
       rotation={rotation}
+      {...events}
     >
       <meshStandardMaterial color={color} roughness={roughness} metalness={metalness} />
     </RoundedBox>
+  )
+}
+
+/**
+ * La pantalla del monitor. Es el objeto más importante del cuarto: al hacerle
+ * clic la cámara se mete adentro y aparece el panel de proyectos por encima
+ * (SPEC §5).
+ *
+ * Es clickeable el objeto mismo, no un puntito flotando al lado — señalar una
+ * pantalla con un puntito sería redundante.
+ */
+function Screen() {
+  const goTo = useStore((s) => s.goTo)
+
+  return (
+    <Piece
+      position={[0, 1.08, 0.014]}
+      size={[0.57, 0.33, 0.01]}
+      color={SCREEN}
+      roughness={0.15}
+      radius={0.003}
+      onClick={(event) => {
+        event.stopPropagation()
+        goTo('monitor')
+      }}
+      onPointerOver={() => {
+        document.body.style.cursor = 'pointer'
+      }}
+      onPointerOut={() => {
+        document.body.style.cursor = 'auto'
+      }}
+    />
   )
 }
 
@@ -319,7 +358,7 @@ export function Props() {
         <Piece position={[0, 0.79, 0]} size={[0.2, 0.02, 0.14]} color={METAL} roughness={0.4} metalness={0.5} />
         <Piece position={[0, 0.87, 0]} size={[0.05, 0.16, 0.05]} color={METAL} roughness={0.4} metalness={0.5} />
         <Piece position={[0, 1.08, 0]} size={[0.6, 0.36, 0.022]} color={METAL} roughness={0.5} radius={0.008} />
-        <Piece position={[0, 1.08, 0.014]} size={[0.57, 0.33, 0.01]} color={SCREEN} roughness={0.15} radius={0.003} />
+        <Screen />
       </group>
 
       <Piece

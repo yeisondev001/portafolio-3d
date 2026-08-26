@@ -12,6 +12,7 @@
 
 export type HotspotId =
   | 'entrada'
+  | 'monitor'
   | 'avatar'
   | 'escritorio'
   | 'certificaciones'
@@ -40,6 +41,11 @@ export type Hotspot = {
   panel: PanelId | null
   /** Segundos que dura el viaje */
   duration?: number
+  /**
+   * No se muestra ni como puntito ni en la barra: se llega haciendo clic
+   * sobre el objeto mismo. Es el caso del monitor.
+   */
+  hidden?: boolean
 }
 
 export const HOTSPOTS: readonly Hotspot[] = [
@@ -68,6 +74,23 @@ export const HOTSPOTS: readonly Hotspot[] = [
     marker: [-0.62, 1.4, -1.87],
     // Sin panel automático: al llegar se elige entre monitor, celular y carpeta
     panel: null,
+  },
+  {
+    /**
+     * Acercamiento a la pantalla del monitor.
+     *
+     * A 40 cm y con el campo de visión de la escena, la pantalla ocupa
+     * alrededor del 85% del alto: llena la vista sin recortarse. Al llegar
+     * se abre el panel de proyectos por encima (SPEC §5).
+     */
+    id: 'monitor',
+    label: 'Proyectos',
+    camera: [-0.677, 1.08, -1.54],
+    target: [-0.622, 1.08, -1.936],
+    marker: [-0.622, 1.08, -1.93],
+    panel: 'proyectos',
+    duration: 1.2,
+    hidden: true,
   },
   {
     id: 'certificaciones',

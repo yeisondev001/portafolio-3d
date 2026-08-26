@@ -39,7 +39,7 @@ export function TopBar() {
       </div>
 
       <nav className={styles.zones} aria-label="Zonas del cuarto">
-        {HOTSPOTS.map((hotspot) => (
+        {HOTSPOTS.filter((hotspot) => !hotspot.hidden).map((hotspot) => (
           <button
             key={hotspot.id}
             type="button"

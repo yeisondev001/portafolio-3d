@@ -7,8 +7,9 @@ export function Hotspot({ data }: { data: HotspotData }) {
   const active = useStore((s) => s.active)
   const goTo = useStore((s) => s.goTo)
 
-  // El punto donde ya estás parado no se muestra
-  if (active === data.id) return null
+  // Ni el punto donde ya estás parado, ni los que se alcanzan haciendo
+  // clic sobre un objeto de la escena
+  if (active === data.id || data.hidden) return null
 
   return (
     <Html position={data.marker} center zIndexRange={[20, 0]}>
