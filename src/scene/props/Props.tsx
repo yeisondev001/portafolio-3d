@@ -114,13 +114,27 @@ function Framed({
   size,
   rotation,
   inner = PAPER,
+  onClick,
 }: {
   position: [number, number, number]
   size: [number, number, number]
   rotation?: [number, number, number]
   inner?: string
+  onClick?: () => void
 }) {
   const [w, h, d] = size
+  const interactive = onClick
+    ? {
+        onClick,
+        onPointerOver: () => {
+          document.body.style.cursor = 'pointer'
+        },
+        onPointerOut: () => {
+          document.body.style.cursor = 'auto'
+        },
+      }
+    : {}
+
   return (
     <group position={position} rotation={rotation}>
       <Piece position={[0, 0, 0]} size={[w, h, d]} color={FRAME} roughness={0.6} radius={0.008} />
@@ -130,6 +144,7 @@ function Framed({
         color={inner}
         roughness={0.95}
         radius={0.004}
+        {...interactive}
       />
     </group>
   )
@@ -343,6 +358,8 @@ function Corkboard() {
 }
 
 export function Props() {
+  const goTo = useStore((s) => s.goTo)
+
   return (
     <group>
       <Desk />
@@ -452,6 +469,7 @@ export function Props() {
         size={[1.0, 0.72, 0.035]}
         rotation={[0, -Math.PI / 2, 0]}
         inner="#dcd8ce"
+        onClick={() => goTo('stack')}
       />
 
       {/* Póster sobre la estantería: pared oeste, apenas torcido */}

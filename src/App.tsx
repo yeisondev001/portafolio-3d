@@ -6,6 +6,7 @@ import { useStore } from './store/useStore'
 // Los paneles 2D no entran al bundle inicial: se descargan al abrirlos
 // por primera vez (CLAUDE.md, convenciones de código)
 const ProjectsPanel = lazy(() => import('./ui/ProjectsPanel'))
+const StackPanel = lazy(() => import('./ui/StackPanel'))
 
 export function App() {
   const panel = useStore((s) => s.panel)
@@ -14,7 +15,10 @@ export function App() {
     <>
       <Scene />
       <TopBar />
-      <Suspense fallback={null}>{panel === 'proyectos' && <ProjectsPanel />}</Suspense>
+      <Suspense fallback={null}>
+        {panel === 'proyectos' && <ProjectsPanel />}
+        {panel === 'stack' && <StackPanel />}
+      </Suspense>
     </>
   )
 }
