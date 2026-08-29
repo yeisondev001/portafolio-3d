@@ -27,6 +27,7 @@ export function CameraRig() {
   const active = useStore((s) => s.active)
   const camera = useThree((s) => s.camera)
   const invalidate = useThree((s) => s.invalidate)
+  const setTraveling = useStore((s) => s.setTraveling)
 
   const progress = useRef(1)
   const duration = useRef(DEFAULT_DURATION)
@@ -53,13 +54,15 @@ export function CameraRig() {
     END_TARGET.set(...hotspot.target)
     progress.current = 0
     duration.current = hotspot.duration ?? DEFAULT_DURATION
+    setTraveling(true)
     invalidate()
-  }, [active, camera, invalidate])
+  }, [active, camera, invalidate, setTraveling])
 
   useFrame((_, delta) => {
     if (progress.current >= 1) return
 
     progress.current = Math.min(1, progress.current + delta / duration.current)
+    if (progress.current >= 1) setTraveling(false)
     const t = ease(progress.current)
 
     camera.position.lerpVectors(START_POS, END_POS, t)

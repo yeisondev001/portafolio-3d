@@ -20,13 +20,13 @@ import { useStore } from '../store/useStore'
 /** Mirando al escritorio, de espaldas a la puerta */
 const FACING_DESK = Math.PI
 /** Mirando a quien entra */
-const FACING_DOOR = -0.12
+const FACING_DOOR = 0.28
 /** Segundos que tarda en darse vuelta */
 const TURN_DURATION = 2.2
 /** Segundos que espera antes de girar, para que el visitante alcance a ver */
 const TURN_DELAY = 1.1
 
-const POSITION: [number, number, number] = [0.2, 0, -1.2]
+const POSITION: [number, number, number] = [-0.02, 0, -1.15]
 
 /** Suavizado con arranque y frenada — smootherstep */
 function ease(t: number): number {

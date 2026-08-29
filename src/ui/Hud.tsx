@@ -1,22 +1,27 @@
 import { HOTSPOTS } from '../data/hotspots'
 import { profile } from '../data/profile'
 import { useStore } from '../store/useStore'
-import styles from './TopBar.module.css'
+import styles from './Hud.module.css'
 
 /**
- * Barra fija: nombre, rol, CV y contacto siempre visibles, más los accesos
- * directos a cada zona.
+ * La interfaz que va sobre la escena.
  *
- * Existe porque los tres datos que más importan son justo los que un
- * portafolio 3D tiende a esconder dentro de objetos (SPEC §4).
+ * Existe porque los tres datos que más importan —nombre, CV y contacto— son
+ * justo los que un portafolio 3D tiende a esconder dentro de objetos que hay
+ * que descubrir (SPEC §4).
+ *
+ * Pero el 3D es el protagonista: acá no hay fondos, ni cajas, ni píldoras.
+ * Solo texto con una sombra suave, arriba la identidad y abajo las zonas,
+ * dejando libre el centro de la pantalla, que es donde se mira.
  */
-export function TopBar() {
+export function Hud() {
   const active = useStore((s) => s.active)
   const goTo = useStore((s) => s.goTo)
+  const traveling = useStore((s) => s.traveling)
 
   return (
-    <header className={styles.bar}>
-      <div className={styles.row}>
+    <div className={styles.hud}>
+      <header className={styles.top}>
         <div className={styles.identity}>
           <span className={styles.name}>{profile.name}</span>
           <span className={styles.role}>{profile.role}</span>
@@ -36,9 +41,12 @@ export function TopBar() {
             GitHub
           </a>
         </nav>
-      </div>
+      </header>
 
-      <nav className={styles.zones} aria-label="Zonas del cuarto">
+      <nav
+        className={`${styles.zones} ${traveling ? styles.zonesTraveling : ''}`}
+        aria-label="Zonas del cuarto"
+      >
         {HOTSPOTS.filter((hotspot) => !hotspot.hidden).map((hotspot) => (
           <button
             key={hotspot.id}
@@ -51,6 +59,6 @@ export function TopBar() {
           </button>
         ))}
       </nav>
-    </header>
+    </div>
   )
 }

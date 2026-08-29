@@ -69,7 +69,6 @@ export function Avatar({ position = [0, 0, 0], rotation = [0, 0, 0] }: Props) {
   const { scene } = useGLTF(MODEL, DRACO_PATH)
   const invalidate = useThree((s) => s.invalidate)
   const camera = useThree((s) => s.camera)
-  const active = useStore((s) => s.active)
   const greeting = useStore((s) => s.greeting)
   const endGreeting = useStore((s) => s.endGreeting)
 
@@ -88,12 +87,11 @@ export function Avatar({ position = [0, 0, 0], rotation = [0, 0, 0] }: Props) {
    * `sitting-beckoning` es un clip armado: piernas sentadas de `sitting`,
    * brazos del `Beckoning` de Mixamo, que es de pie. Ver
    * scripts/convertir-animaciones.mjs.
+   *
+   * El clip `sitting-pointing` sigue disponible en animaciones.json pero no
+   * se usa: señalar el monitor al acercarse quedaba forzado.
    */
-  const wanted = greeting
-    ? 'sitting-beckoning'
-    : active === 'escritorio'
-      ? 'sitting-pointing'
-      : 'sitting'
+  const wanted = greeting ? 'sitting-beckoning' : 'sitting'
 
   useEffect(() => {
     head.current = (scene.getObjectByName('Head') as Bone) ?? null

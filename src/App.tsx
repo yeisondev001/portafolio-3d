@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { Scene } from './scene/Scene'
-import { TopBar } from './ui/TopBar'
+import { Hud } from './ui/Hud'
 import { useStore } from './store/useStore'
 
 // Los paneles 2D no entran al bundle inicial: se descargan al abrirlos
@@ -14,7 +14,7 @@ export function App() {
   return (
     <>
       <Scene />
-      <TopBar />
+      <Hud />
       <Suspense fallback={null}>
         {panel === 'proyectos' && <ProjectsPanel />}
         {panel === 'stack' && <StackPanel />}

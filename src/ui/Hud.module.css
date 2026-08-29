@@ -1,0 +1,186 @@
+/*
+ * Interfaz mínima sobre la escena.
+ *
+ * La versión anterior era una franja oscura con dos filas de píldoras que
+ * tapaba el cuarto justo donde más se mira. Acá no hay fondo ni cajas: solo
+ * texto, con una sombra suave para que se lea sobre cualquier parte de la
+ * escena.
+ *
+ * Se mantiene lo que exige SPEC §4 —nombre, CV y contacto siempre visibles—
+ * pero sin competir con el 3D.
+ */
+
+.hud {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  color: #f4efe8;
+  text-shadow: 0 1px 6px rgb(0 0 0 / 0.75);
+}
+
+.hud a,
+.hud button {
+  pointer-events: auto;
+}
+
+/* ── Arriba: identidad y contacto ── */
+
+/*
+ * Degradado apenas perceptible detrás del texto.
+ *
+ * Sin él, la legibilidad depende de qué haya en la escena: sobre la alfombra
+ * clara el texto de abajo desaparecía. Es la mitad de opaco que la franja
+ * original y no tiene borde, así que no se lee como una barra.
+ */
+.top {
+  background: linear-gradient(to bottom, rgb(12 9 7 / 0.55), transparent);
+  position: absolute;
+  inset: 0 0 auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 20px 26px calc(20px + env(safe-area-inset-top));
+}
+
+.identity {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  min-width: 0;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.role {
+  font-size: 13px;
+  opacity: 0.62;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+.link {
+  color: inherit;
+  font-size: 13px;
+  text-decoration: none;
+  opacity: 0.85;
+  transition: opacity 0.16s ease;
+}
+
+.link:hover,
+.link:focus-visible {
+  opacity: 1;
+}
+
+.cv {
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+/* ── Abajo: las zonas del cuarto ── */
+
+.zones {
+  background: linear-gradient(to top, rgb(12 9 7 / 0.55), transparent);
+  transition: opacity 0.4s ease;
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  padding: 42px 20px calc(18px + env(safe-area-inset-bottom));
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.zones::-webkit-scrollbar {
+  display: none;
+}
+
+/*
+ * Cada zona lleva su propia píldora translúcida: es lo único que garantiza
+ * que se lea igual sobre una pared oscura que sobre la alfombra clara.
+ */
+.zone {
+  flex-shrink: 0;
+  padding: 8px 15px;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(12 9 7 / 0.42);
+  color: inherit;
+  font: inherit;
+  font-size: 12.5px;
+  white-space: nowrap;
+  opacity: 0.82;
+  cursor: pointer;
+  transition:
+    opacity 0.16s ease,
+    background 0.16s ease;
+}
+
+.zone:hover,
+.zone:focus-visible {
+  opacity: 1;
+  background: rgb(12 9 7 / 0.7);
+}
+
+/*
+ * Mientras la cámara viaja, la navegación se corre del camino: es justo el
+ * momento en que el visitante está mirando el movimiento y no la interfaz.
+ * La identidad y el CV nunca se atenúan — son lo que alguien apurado
+ * necesita encontrar (SPEC §4).
+ */
+.zonesTraveling {
+  opacity: 0.18;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zones {
+    transition: none;
+  }
+
+  .zonesTraveling {
+    opacity: 1;
+  }
+}
+
+.zoneActive,
+.zoneActive:hover {
+  opacity: 1;
+  background: rgb(244 239 232 / 0.92);
+  color: #17120e;
+  font-weight: 500;
+  text-shadow: none;
+}
+
+@media (max-width: 620px) {
+  .top {
+    align-items: flex-start;
+    padding: 16px 18px calc(16px + env(safe-area-inset-top));
+  }
+
+  .identity {
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .links {
+    gap: 14px;
+  }
+
+  .zones {
+    justify-content: flex-start;
+  }
+}

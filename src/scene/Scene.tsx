@@ -54,7 +54,7 @@ export function Scene() {
 
       {/* Velador: el acento cálido sobre el escritorio */}
       <pointLight
-        position={[-1.36, 1.12, -1.9]}
+        position={[-1.52, 1.15, -1.98]}
         intensity={LIGHTS.lamp}
         distance={5}
         decay={2}
@@ -63,7 +63,7 @@ export function Scene() {
 
       {/* Monitor: luz fría que le pega al avatar en la cara y el pecho */}
       <pointLight
-        position={[-0.62, 1.05, -1.72]}
+        position={[-0.9, 1.05, -1.78]}
         intensity={LIGHTS.monitor}
         distance={3.5}
         decay={2}

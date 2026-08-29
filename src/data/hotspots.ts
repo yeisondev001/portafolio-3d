@@ -5,9 +5,13 @@
  * No hay que tocar CameraRig.tsx ni Scene.tsx (CLAUDE.md).
  *
  * Sistema de coordenadas del cuarto (5 × 2,7 × 4,4 m, centrado en el origen):
- *   x: -2,5 (oeste, estantería) .. +2,5 (este, pizarra y cama)
+ *   x: -2,5 (oeste: cama y estantería) .. +2,5 (este: pizarra)
  *   y:  0 (piso) .. 2,7 (techo)
- *   z: -2,2 (norte, escritorio y certificaciones) .. +2,2 (sur, puerta)
+ *   z: -2,2 (norte: escritorio y certificaciones) .. +2,2 (sur: puerta)
+ *
+ * Distribución B, "barrido horario": el recorrido gira siempre hacia el
+ * mismo lado —avatar, escritorio, certificaciones, stack, trayectoria—
+ * para que la cámara nunca cruce el cuarto de punta a punta.
  */
 
 export type HotspotId =
@@ -52,26 +56,26 @@ export const HOTSPOTS: readonly Hotspot[] = [
   {
     id: 'entrada',
     label: 'Entrada',
-    camera: [-0.6, 1.62, 1.72],
-    target: [-0.2, 1.15, -1.5],
-    marker: [-0.6, 1.5, 1.5],
+    camera: [0.45, 1.62, 1.7],
+    target: [-0.5, 1.12, -1.5],
+    marker: [0.45, 1.48, 1.5],
     panel: null,
     duration: 1.8,
   },
   {
     id: 'avatar',
     label: 'Sobre mí',
-    camera: [0.24, 1.32, 0.28],
-    target: [0.2, 1.12, -1.2],
-    marker: [0.2, 1.5, -1.2],
+    camera: [0.0, 1.32, 0.4],
+    target: [-0.02, 1.12, -1.15],
+    marker: [-0.02, 1.5, -1.15],
     panel: 'sobre-mi',
   },
   {
     id: 'escritorio',
     label: 'Escritorio',
-    camera: [-0.62, 1.22, -1.0],
-    target: [-0.62, 1.04, -1.95],
-    marker: [-0.62, 1.4, -1.87],
+    camera: [-0.9, 1.24, -1.02],
+    target: [-0.9, 1.04, -1.98],
+    marker: [-0.9, 1.42, -1.9],
     // Sin panel automático: al llegar se elige entre monitor, celular y carpeta
     panel: null,
   },
@@ -80,40 +84,42 @@ export const HOTSPOTS: readonly Hotspot[] = [
      * Acercamiento a la pantalla del monitor.
      *
      * A 40 cm y con el campo de visión de la escena, la pantalla ocupa
-     * alrededor del 85% del alto: llena la vista sin recortarse. Al llegar
-     * se abre el panel de proyectos por encima (SPEC §5).
+     * alrededor del 85% del alto: llena la vista sin recortarse, y la
+     * interfaz que vive dentro de la pantalla se vuelve legible y tocable.
      */
     id: 'monitor',
     label: 'Proyectos',
-    camera: [-0.677, 1.08, -1.54],
-    target: [-0.622, 1.08, -1.936],
-    marker: [-0.622, 1.08, -1.93],
-    panel: 'proyectos',
+    camera: [-0.962, 1.08, -1.597],
+    target: [-0.902, 1.08, -1.967],
+    marker: [-0.902, 1.08, -1.96],
+    // Sin panel: los proyectos se leen en la pantalla misma. El panel 2D
+    // queda como alternativa, detrás del botón "Ver en grande" (SPEC §5).
+    panel: null,
     duration: 1.2,
     hidden: true,
   },
   {
     id: 'certificaciones',
     label: 'Certificaciones',
-    camera: [0.98, 1.7, -1.05],
-    target: [0.98, 1.62, -2.2],
-    marker: [0.98, 1.58, -2.03],
+    camera: [1.12, 1.7, -1.05],
+    target: [1.12, 1.62, -2.2],
+    marker: [1.12, 1.58, -2.03],
     panel: 'certificaciones',
   },
   {
     id: 'stack',
     label: 'Stack',
-    camera: [1.05, 1.68, -0.3],
-    target: [2.5, 1.68, -0.3],
-    marker: [2.32, 1.68, -0.3],
+    camera: [1.12, 1.6, -1.75],
+    target: [2.5, 1.6, -1.75],
+    marker: [2.32, 1.6, -1.75],
     panel: 'stack',
   },
   {
     id: 'trayectoria',
     label: 'Trayectoria',
-    camera: [-1.35, 1.28, -0.15],
-    target: [-2.5, 1.1, -0.15],
-    marker: [-2.14, 1.28, -0.15],
+    camera: [-1.15, 1.32, 0.9],
+    target: [-2.5, 1.15, 0.9],
+    marker: [-2.1, 1.32, 0.9],
     panel: 'trayectoria',
   },
 ]

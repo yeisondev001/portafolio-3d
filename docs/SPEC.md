@@ -428,6 +428,24 @@ El código se construye con datos de mentira hasta que lleguen los reales.
 | **Poly Pizza / Sketchfab** | Muebles prehechos si hace falta | gratis (revisar licencia) |
 | **gltf-transform / gltfjsx** | Optimizar y tipar los modelos | gratis |
 
+### Modelos de los muebles
+
+Los muebles grandes son de **[Quaternius](https://quaternius.com)**, bajados de
+[Poly Pizza](https://poly.pizza), licencia **CC0** (dominio público: no exige
+atribución ni limita el uso comercial). Están en `public/models/muebles/`.
+
+Vienen en escalas arbitrarias — la estantería medía 4,4 m de alto y la papelera
+2,2 — así que cada uno lleva en `Props.tsx` su factor calculado contra la caja
+contenedora medida. **Cambiar un modelo obliga a recalcular su factor.**
+
+Por qué modelos y no cajas: cada mueble eran entre 3 y 14 cajas sueltas, y cada
+caja es un draw call. Reemplazarlos bajó de ~80 a ~35, dentro del presupuesto
+de §7 por primera vez.
+
+**Al elegir uno nuevo, mirar el conteo de triángulos**: menos de 10.000 por
+objeto es seguro. Los escaneos "realistas" de 100.000+ triángulos rompen el
+presupuesto con un solo mueble.
+
 ---
 
 ## 14. El avatar

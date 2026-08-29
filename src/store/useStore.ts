@@ -12,8 +12,14 @@ type State = {
    * Lo dispara Workstation al terminar de girar la silla (SPEC §3).
    */
   greeting: boolean
+  /**
+   * La cámara está viajando entre puntos. Lo usa la interfaz para atenuar
+   * la navegación mientras dura el movimiento.
+   */
+  traveling: boolean
   /** Viajar a un punto. Abre su panel si tiene uno asociado. */
   goTo: (id: HotspotId) => void
+  setTraveling: (traveling: boolean) => void
   startGreeting: () => void
   endGreeting: () => void
   openPanel: (panel: PanelId) => void
@@ -24,12 +30,15 @@ export const useStore = create<State>((set) => ({
   active: 'entrada',
   panel: null,
   greeting: false,
+  traveling: false,
 
   goTo: (id) =>
     set((state) => {
       if (state.active === id) return state
       return { active: id, panel: getHotspot(id).panel }
     }),
+
+  setTraveling: (traveling) => set({ traveling }),
 
   startGreeting: () => set({ greeting: true }),
   endGreeting: () => set({ greeting: false }),
