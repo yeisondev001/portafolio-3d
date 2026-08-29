@@ -101,9 +101,9 @@ export const HOTSPOTS: readonly Hotspot[] = [
   {
     id: 'certificaciones',
     label: 'Certificaciones',
-    camera: [1.12, 1.7, -1.05],
-    target: [1.12, 1.62, -2.2],
-    marker: [1.12, 1.58, -2.03],
+    camera: [1.15, 1.62, -1.15],
+    target: [1.15, 1.62, -2.2],
+    marker: [1.15, 1.62, -2.05],
     panel: 'certificaciones',
   },
   {

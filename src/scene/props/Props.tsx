@@ -35,7 +35,6 @@ const PAPER = '#cfc7b8'
 const FRAME = '#3a3430'
 const SCREEN = '#4a6f96'
 const CERAMIC = '#b8ada0'
-const CORK = '#a8845a'
 
 // ── Muebles descargados ──────────────────────────────────────────────
 
@@ -46,14 +45,36 @@ function Mueble({
   position,
   rotation,
   scale,
+  onClick,
 }: {
   file: string
   position: Vec3
   rotation?: Vec3
   scale: number
+  onClick?: () => void
 }) {
   const { scene } = useGLTF(`/models/muebles/${file}.glb`)
-  return <primitive object={scene} position={position} rotation={rotation} scale={scale} />
+  const interactive = onClick
+    ? {
+        onClick,
+        onPointerOver: () => {
+          document.body.style.cursor = 'pointer'
+        },
+        onPointerOut: () => {
+          document.body.style.cursor = 'auto'
+        },
+      }
+    : {}
+
+  return (
+    <primitive
+      object={scene}
+      position={position}
+      rotation={rotation}
+      scale={scale}
+      {...interactive}
+    />
+  )
 }
 
 /**
@@ -232,14 +253,6 @@ export function Chair() {
   return <primitive object={scene} scale={0.98} />
 }
 
-/** Certificaciones: escalonadas, no en fila */
-const CERTS = [
-  { x: 0.62, y: 1.62, w: 0.34, h: 0.44 },
-  { x: 1.12, y: 1.9, w: 0.38, h: 0.48 },
-  { x: 1.64, y: 1.6, w: 0.34, h: 0.44 },
-  { x: 1.12, y: 1.24, w: 0.3, h: 0.38 },
-]
-
 /** Post-its del corcho: en qué está trabajando ahora */
 const NOTES = [
   { x: -0.2, y: 0.14, color: '#d9c56a', tilt: 0.08 },
@@ -268,14 +281,7 @@ export function Props() {
       </group>
 
       {/* Teclado, girado igual que el monitor */}
-      <Piece
-        position={[-0.9, 0.768, -1.72]}
-        rotation={[0, -0.16, 0]}
-        size={[0.42, 0.018, 0.14]}
-        color={METAL}
-        roughness={0.7}
-        radius={0.006}
-      />
+      <Mueble file="teclado" position={[-0.9, 0.758, -1.72]} rotation={[0, -0.16, 0]} scale={1.56} />
 
       {/* Velador: la fuente cálida dominante */}
       <Mueble file="velador" position={[-1.52, 0.755, -1.98]} rotation={[0, 0.4, 0]} scale={0.8} />
@@ -306,23 +312,27 @@ export function Props() {
         <Piece position={[0.055, 0.805, 0]} size={[0.022, 0.055, 0.02]} color={CERAMIC} roughness={0.35} radius={0.01} />
       </group>
 
-      {/* ── Pared norte ── */}
-      {CERTS.map((cert) => (
-        <Framed
-          key={`${cert.x}-${cert.y}`}
-          position={[cert.x, cert.y, -2.17]}
-          size={[cert.w, cert.h, 0.028]}
-          onClick={() => goTo('certificaciones')}
-        />
-      ))}
+      {/* ── Pared norte ──
+          Un solo cuadro grande en vez de cuatro marquitos: leía como una
+          galería de cajas y competía con el escritorio. El modelo viene
+          acostado, así que se para con el giro en X y se pasa a horizontal
+          con el giro en Z. Queda de 1,4 × 1,0 m. */}
+      <Mueble
+        file="cuadro"
+        position={[1.15, 1.62, -2.15]}
+        rotation={[Math.PI / 2, 0, Math.PI / 2]}
+        scale={5.2}
+        onClick={() => goTo('certificaciones')}
+      />
 
       {/* Cartel con nombre y rol, arriba del escritorio */}
       <Framed position={[-0.9, 2.28, -2.17]} size={[1.0, 0.22, 0.03]} inner="#d9d2c4" />
 
-      {/* Corcho con post-its, en el extremo izquierdo de la pared norte */}
-      <group position={[-2.05, 1.6, -2.16]}>
-        <Piece position={[0, 0, 0]} size={[0.72, 0.56, 0.03]} color={FRAME} radius={0.008} />
-        <Piece position={[0, 0, 0.014]} size={[0.66, 0.5, 0.02]} color={CORK} roughness={1} radius={0.004} />
+      {/* Corcho con post-its, en el extremo izquierdo de la pared norte.
+          El tablero es un modelo; los post-its siguen siendo piezas porque
+          salen de un array y se van a editar seguido. */}
+      <group position={[-2.05, 1.6, -2.17]}>
+        <Mueble file="corcho" position={[0, -0.28, 0]} scale={1.05} />
         {NOTES.map((note) => (
           <Piece
             key={`${note.x}-${note.y}`}
@@ -377,4 +387,6 @@ export function Props() {
 
 // Se precargan para que no aparezcan de a uno mientras el visitante entra
 for (const item of FURNITURE) useGLTF.preload(`/models/muebles/${item.file}.glb`)
-useGLTF.preload('/models/muebles/silla.glb')
+for (const extra of ['silla', 'teclado', 'cuadro', 'corcho']) {
+  useGLTF.preload(`/models/muebles/${extra}.glb`)
+}
