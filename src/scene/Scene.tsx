@@ -7,6 +7,7 @@ import { Workstation } from './Workstation'
 import { Props } from './props/Props'
 import { CameraRig } from './CameraRig'
 import { Hotspot } from './Hotspot'
+import { Wake, WakeOnLoad } from './Wake'
 
 /**
  * Intensidades de las luces provisionales, todas juntas para poder ajustarlas
@@ -73,8 +74,14 @@ export function Scene() {
       {/* Relleno para que los rincones no queden en negro puro */}
       <hemisphereLight args={['#7d8899', '#2a231d', LIGHTS.fill]} />
 
+      <Wake />
       <Room />
-      <Props />
+
+      {/* Los muebles se descargan: sin este límite, suspenderían toda la escena */}
+      <Suspense fallback={null}>
+        <WakeOnLoad />
+        <Props />
+      </Suspense>
 
       {/*
         Sombras de contacto: la mancha oscura donde cada mueble toca el piso.
@@ -97,6 +104,7 @@ export function Scene() {
 
       {/* Silla giratoria con el autor: entra trabajando y se da vuelta (Workstation.tsx) */}
       <Suspense fallback={null}>
+        <WakeOnLoad />
         <Workstation />
       </Suspense>
       <CameraRig />

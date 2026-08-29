@@ -110,6 +110,13 @@ const FURNITURE: {
   // Sur: la puerta
   { file: 'puerta', position: [0.6, 0, 2.16], scale: 0.5 },
 
+  // Aire acondicionado, alto sobre la pared oeste. Es de los objetos que
+  // más rápido dicen "esto es un cuarto de verdad" y ocupa pared vacía.
+  //
+  // Corrido del rincón a propósito: pegado a la esquina pisaba las dos
+  // paredes a la vez y se leía flotando.
+  { file: 'aire', position: [-2.14, 2.18, -0.75], rotation: [0, Math.PI / 2, 0], scale: 0.82 },
+
   // Rincón sureste y centro
   { file: 'planta', position: [2.1, 0, 1.7], scale: 2.2 },
   { file: 'alfombra', position: [0.15, 0.004, 0.1], rotation: [0, 0.16, 0], scale: 0.75 },
@@ -347,15 +354,26 @@ export function Props() {
         <Piece position={[0.055, 0.805, 0]} size={[0.022, 0.055, 0.02]} color={CERAMIC} roughness={0.35} radius={0.01} />
       </group>
 
-      {/* ── Pared norte ──
-          Un solo cuadro grande en vez de cuatro marquitos: leía como una
-          galería de cajas y competía con el escritorio. El modelo viene
-          acostado, así que se para con el giro en X y se pasa a horizontal
-          con el giro en Z. Queda de 1,4 × 1,0 m. */}
+      {/*
+        ── Pared norte ──
+        Un solo cuadro grande en vez de cuatro marquitos: leían como una
+        galería de cajas y competían con el escritorio.
+
+        El modelo viene acostado, con su cara mirando hacia arriba. El giro
+        en X lo para contra la pared; el giro en Y lo pasa a horizontal.
+
+        Ojo con el orden: three aplica los ángulos como Z, después Y, después
+        X. Usar Z para lo horizontal —que fue el primer intento— lo dejaba
+        de canto mirando a la pared oeste, porque se aplicaba antes de
+        pararlo. En Y funciona porque también va antes que X, pero gira
+        sobre el eje que en ese momento todavía es la normal del cuadro.
+
+        Queda de 1,4 × 1,0 m.
+      */}
       <Mueble
         file="cuadro"
         position={[1.15, 1.62, -2.15]}
-        rotation={[Math.PI / 2, 0, Math.PI / 2]}
+        rotation={[Math.PI / 2, Math.PI / 2, 0]}
         scale={5.2}
         onClick={() => goTo('certificaciones')}
       />
@@ -420,8 +438,21 @@ export function Props() {
   )
 }
 
-// Se precargan para que no aparezcan de a uno mientras el visitante entra
-for (const item of FURNITURE) useGLTF.preload(`/models/muebles/${item.file}.glb`)
-for (const extra of ['silla', 'teclado', 'cuadro', 'corcho']) {
-  useGLTF.preload(`/models/muebles/${extra}.glb`)
-}
+/**
+ * TODOS los modelos que usa la escena, no solo los de `FURNITURE`.
+ *
+ * Esta lista tiene que estar completa. Un modelo que se renderiza pero no se
+ * precarga no se pide hasta que React llega a él suspendiendo, y mientras
+ * tanto bloquea a todos los demás: el velador quedó afuera y retrasó el
+ * cuarto entero de 0,8 a 6 segundos.
+ */
+const MODELS = [
+  ...FURNITURE.map((item) => item.file),
+  'silla',
+  'velador',
+  'teclado',
+  'cuadro',
+  'corcho',
+]
+
+for (const file of MODELS) useGLTF.preload(`/models/muebles/${file}.glb`)
