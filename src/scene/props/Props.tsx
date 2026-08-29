@@ -24,6 +24,8 @@
  */
 import { useGLTF, RoundedBox } from '@react-three/drei'
 import type { ThreeEvent } from '@react-three/fiber'
+import type { HotspotId } from '../../data/hotspots'
+import { profile } from '../../data/profile'
 import { useStore } from '../../store/useStore'
 import { Cables } from './Cables'
 import { Clock } from './Clock'
@@ -81,13 +83,20 @@ function Mueble({
  * Factor para llevar cada modelo a medidas reales, calculado contra su caja
  * contenedora medida. Cambiar un modelo obliga a recalcular su factor.
  */
-const FURNITURE: { file: string; position: Vec3; rotation?: Vec3; scale: number }[] = [
+const FURNITURE: {
+  file: string
+  position: Vec3
+  rotation?: Vec3
+  scale: number
+  /** Si lleva zona, el mueble es clickeable y viaja hasta ese punto */
+  zone?: HotspotId
+}[] = [
   // Norte: el escritorio, con el avatar delante
   { file: 'escritorio', position: [-0.9, 0, -1.85], scale: 0.81 },
   { file: 'papelera', position: [-0.05, 0, -1.9], scale: 0.18 },
 
   // Oeste: la estantería de la trayectoria
-  { file: 'estanteria', position: [-2.32, 0, 0.9], rotation: [0, Math.PI / 2, 0], scale: 0.42 },
+  { file: 'estanteria', position: [-2.32, 0, 0.9], rotation: [0, Math.PI / 2, 0], scale: 0.42, zone: 'trayectoria' },
 
   // Este: la zona de descanso, del lado contrario al escritorio.
   //
@@ -264,11 +273,26 @@ const NOTES = [
 
 export function Props() {
   const goTo = useStore((s) => s.goTo)
+  const openPanel = useStore((s) => s.openPanel)
+
+  /** Objetos que abren algo al tocarlos: cursor de mano y clic */
+  const clickable = (action: () => void) => ({
+    onClick: (event: { stopPropagation: () => void }) => {
+      event.stopPropagation()
+      action()
+    },
+    onPointerOver: () => {
+      document.body.style.cursor = 'pointer'
+    },
+    onPointerOut: () => {
+      document.body.style.cursor = 'auto'
+    },
+  })
 
   return (
     <group>
-      {FURNITURE.map((item) => (
-        <Mueble key={item.file} {...item} />
+      {FURNITURE.map(({ zone, ...item }) => (
+        <Mueble key={item.file} {...item} onClick={zone ? () => goTo(zone) : undefined} />
       ))}
 
       <Cables />
@@ -294,9 +318,14 @@ export function Props() {
         color={METAL}
         roughness={0.25}
         radius={0.008}
+        {...clickable(() => openPanel('contacto'))}
       />
 
-      {/* Carpeta: la descarga del CV. Torcida, como quedan las carpetas */}
+      {/*
+        Carpeta: descarga directa del CV, sin panel intermedio (SPEC §5).
+        Un ancla creada al vuelo es la forma de disparar una descarga desde
+        un objeto 3D, que no puede ser un <a> de verdad.
+      */}
       <Piece
         position={[-0.42, 0.775, -2.02]}
         rotation={[0, -0.28, 0]}
@@ -304,6 +333,12 @@ export function Props() {
         color={PAPER}
         roughness={0.95}
         radius={0.006}
+        {...clickable(() => {
+          const link = document.createElement('a')
+          link.href = profile.cv
+          link.download = ''
+          link.click()
+        })}
       />
 
       {/* Taza: el objeto que dice que acá vive alguien */}
