@@ -114,7 +114,13 @@ se rompió: avisar antes de seguir.
 
 ## Assets
 
-- Modelos: `.glb` comprimidos, procesados con `npx gltfjsx modelo.glb --types --transform`.
+- Modelos: `.glb` con las texturas comprimidas por `scripts/comprimir-texturas.mjs`.
+- **Sin Draco.** Comprimir la geometría ahorra medio mega y cuesta ~9 segundos
+  de espera al cargar; está medido en SPEC §7.3. Antes de volver a activarlo,
+  medir de nuevo.
+- Todo modelo que se renderice tiene que estar en la lista de precarga. Uno
+  que falte no se pide hasta que React llega a él y mientras tanto bloquea al
+  resto de la escena.
 - Texturas: `.ktx2` para lo que va en la escena, `.webp` para las capturas de los paneles.
 - Todo en `public/`, referenciado por ruta absoluta (`/models/cuarto.glb`).
 - Antes de sumar un modelo nuevo, verificar el presupuesto de triángulos.

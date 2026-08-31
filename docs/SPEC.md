@@ -249,12 +249,30 @@ En runtime el navegador solo muestra imágenes: costo cercano a cero.
 
 | Tipo | Formato | Herramienta |
 |---|---|---|
-| Modelos | `.glb` + Draco o Meshopt | `gltfjsx --transform` |
+| Modelos | `.glb`, texturas comprimidas | `scripts/comprimir-texturas.mjs` |
 | Texturas | `.ktx2` (Basis) | `gltf-transform` |
 | Capturas de proyectos | `.webp` | — |
 
 KTX2 importa especialmente: el celular lo mantiene comprimido **en memoria de video**,
 no solo durante la descarga.
+
+#### Draco: descartado, y por qué
+
+Comprimir la geometría con Draco dejaba el avatar en 0,69 MB en vez de 1,56.
+Pero medido en el navegador **tardaba unos 9 segundos en montarse**: bajar el
+decodificador y descomprimir bloqueaban toda la secuencia de entrada, y el
+visitante veía un cuarto sin nadie adentro.
+
+Sin Draco el avatar pesa 870 KB más, pero desaparecen la descompresión y los
+246 KB del decodificador. **Nueve segundos de cuarto vacío cuestan más
+visitantes que medio mega de descarga.**
+
+Las texturas sí se comprimen: ahí estaba el 75% del peso original y no cuesta
+tiempo de CPU.
+
+Si algún día el cuarto horneado de Blender pesa mucho, vale volver a medir
+Draco para *ese* modelo — la conclusión es sobre este caso, no sobre la
+técnica.
 
 ### 7.4 Techo de resolución
 

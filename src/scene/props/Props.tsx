@@ -192,15 +192,23 @@ function Framed({
       }
     : {}
 
+  /*
+   * La lámina va justo sobre la cara del marco, apenas sobresaliendo.
+   *
+   * No puede ir hundida: el marco es una caja maciza y la taparía por
+   * completo — el primer intento dejó las certificaciones como un rectángulo
+   * negro. Tampoco muy adelante, que se lee como dos cajas apiladas.
+   * Sobresalir tres milímetros es el punto justo.
+   */
   return (
     <group position={position} rotation={rotation}>
       <Piece position={[0, 0, 0]} size={[w, h, d]} color={FRAME} roughness={0.6} radius={0.008} />
       <Piece
-        position={[0, 0, d * 0.7]}
-        size={[w * 0.86, h * 0.86, d * 0.4]}
+        position={[0, 0, d * 0.5]}
+        size={[w * 0.88, h * 0.88, d * 0.14]}
         color={inner}
         roughness={0.95}
-        radius={0.004}
+        radius={0.003}
         {...interactive}
       />
     </group>
@@ -355,26 +363,23 @@ export function Props() {
       </group>
 
       {/*
-        ── Pared norte ──
-        Un solo cuadro grande en vez de cuatro marquitos: leían como una
-        galería de cajas y competían con el escritorio.
+        ── Pared norte: las certificaciones ──
 
-        El modelo viene acostado, con su cara mirando hacia arriba. El giro
-        en X lo para contra la pared; el giro en Y lo pasa a horizontal.
+        Un solo marco grande de 1,45 × 1,02 m, en vez de cuatro marquitos que
+        leían como una galería de cajas.
 
-        Ojo con el orden: three aplica los ángulos como Z, después Y, después
-        X. Usar Z para lo horizontal —que fue el primer intento— lo dejaba
-        de canto mirando a la pared oeste, porque se aplicaba antes de
-        pararlo. En Y funciona porque también va antes que X, pero gira
-        sobre el eje que en ese momento todavía es la normal del cuadro.
+        Es un marco construido y no un modelo descargado a propósito: los
+        modelos de cuadros traen su obra pintada en la textura, y acá hace
+        falta una superficie LIMPIA donde después van los diplomas escaneados.
+        Una pintura decorativa como contenedor de certificaciones no dice nada.
 
-        Queda de 1,4 × 1,0 m.
+        TODO: cuando lleguen los escaneos, la lámina interior lleva la imagen
+        del diploma en vez del color plano.
       */}
-      <Mueble
-        file="cuadro"
-        position={[1.15, 1.62, -2.15]}
-        rotation={[Math.PI / 2, Math.PI / 2, 0]}
-        scale={5.2}
+      <Framed
+        position={[1.15, 1.62, -2.16]}
+        size={[1.45, 1.02, 0.06]}
+        inner="#e0d8c8"
         onClick={() => goTo('certificaciones')}
       />
 
@@ -408,12 +413,20 @@ export function Props() {
         onClick={() => goTo('stack')}
       />
 
-      {/* Póster sobre la estantería, apenas torcido */}
-      <Framed
-        position={[-2.46, 1.75, -0.15]}
-        size={[0.62, 0.85, 0.028]}
-        rotation={[0, Math.PI / 2, 0.02]}
-        inner="#8c6b5a"
+      {/*
+        Pared oeste: la pintura decorativa.
+
+        Es el modelo que antes hacía de certificaciones. Acá sí corresponde:
+        trae su propia obra en la textura y no tiene que contener nada.
+
+        El giro en Z lleva la cara del cuadro —que mira hacia arriba— a mirar
+        hacia el este, o sea hacia adentro del cuarto.
+      */}
+      <Mueble
+        file="cuadro"
+        position={[-2.46, 1.72, -0.1]}
+        rotation={[0, 0, -Math.PI / 2]}
+        scale={3.36}
       />
 
       {/* ── Suelto ── */}

@@ -16,12 +16,22 @@ import { useStore } from '../store/useStore'
 
 const MODEL = '/models/avatar.glb'
 const CLIPS = '/models/animaciones.json'
-/**
- * El modelo viene comprimido con Draco (4,3 MB → 0,7 MB). El decodificador
- * se sirve desde /public/draco en vez del CDN de Google: sin dependencias
- * de terceros y funciona sin conexión.
+
+/*
+ * SIN Draco, a propósito.
+ *
+ * Con la geometría comprimida el avatar pesaba 0,69 MB en vez de 1,56, pero
+ * medido en el navegador tardaba ~9 segundos en montarse: bajar el
+ * decodificador y descomprimir bloqueaba toda la secuencia de entrada, y el
+ * visitante veía un cuarto sin nadie adentro.
+ *
+ * Sin Draco pesa 870 KB más, pero desaparecen tanto la descompresión como los
+ * 246 KB del decodificador. Nueve segundos de cuarto vacío cuestan más
+ * visitantes que medio mega.
+ *
+ * Las texturas SÍ siguen comprimidas (scripts/comprimir-texturas.mjs): ahí
+ * estaba el 75% del peso original y no cuesta tiempo de CPU.
  */
-const DRACO_PATH = '/draco/'
 
 /** Cuánto puede girar la cabeza siguiendo a la cámara, en radianes */
 const HEAD_YAW_LIMIT = 0.6
@@ -52,11 +62,17 @@ function clamp(value: number, limit: number): number {
 
 type ClipJSON = Parameters<typeof AnimationClip.parse>[0]
 
-let clipsPromise: Promise<AnimationClip[]> | null = null
+/**
+ * La descarga arranca al importar el módulo, no al montar el avatar.
+ *
+ * Antes se pedía dentro del efecto de montaje, o sea después de que el modelo
+ * terminara de cargar: dos esperas en fila en vez de en paralelo.
+ */
+const clipsPromise: Promise<AnimationClip[]> = fetch(CLIPS)
+  .then((response) => response.json() as Promise<Record<string, ClipJSON>>)
+  .then((data) => Object.values(data).map((json) => AnimationClip.parse(json)))
+
 function loadClips(): Promise<AnimationClip[]> {
-  clipsPromise ??= fetch(CLIPS)
-    .then((response) => response.json() as Promise<Record<string, ClipJSON>>)
-    .then((data) => Object.values(data).map((json) => AnimationClip.parse(json)))
   return clipsPromise
 }
 
@@ -66,7 +82,7 @@ type Props = {
 }
 
 export function Avatar({ position = [0, 0, 0], rotation = [0, 0, 0] }: Props) {
-  const { scene } = useGLTF(MODEL, DRACO_PATH)
+  const { scene } = useGLTF(MODEL)
   const invalidate = useThree((s) => s.invalidate)
   const camera = useThree((s) => s.camera)
   const greeting = useStore((s) => s.greeting)
@@ -172,4 +188,4 @@ export function Avatar({ position = [0, 0, 0], rotation = [0, 0, 0] }: Props) {
   return <primitive object={scene} position={position} rotation={rotation} />
 }
 
-useGLTF.preload(MODEL, DRACO_PATH)
+useGLTF.preload(MODEL)
