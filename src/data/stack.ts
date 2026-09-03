@@ -22,6 +22,10 @@ export type Tech = {
   note?: string
   /** Ids de `projects.ts` donde aparece */
   projects?: string[]
+  /**
+   * Color oficial de la marca. Se usa para pintar el logo del tablero, que
+   * viene monocromo desde Simple Icons.
+   */
   color: string
 }
 
@@ -50,7 +54,7 @@ export const stack: Tech[] = [
     category: 'lenguaje',
     level: 'fuerte',
     note: 'El que más aparece en mis proyectos.',
-    color: '#d9b84a',
+    color: '#f7df1e',
   },
   {
     id: 'typescript',
@@ -59,7 +63,7 @@ export const stack: Tech[] = [
     level: 'solido',
     note: 'Lo que uso hoy, incluido este portafolio.',
     projects: ['portafolio'],
-    color: '#4a7fd9',
+    color: '#3178c6',
   },
   {
     id: 'python',
@@ -67,7 +71,7 @@ export const stack: Tech[] = [
     category: 'lenguaje',
     level: 'solido',
     note: 'Aplicaciones web y automatizaciones.',
-    color: '#4a8cd9',
+    color: '#3776ab',
   },
   {
     id: 'csharp',
@@ -75,14 +79,14 @@ export const stack: Tech[] = [
     category: 'lenguaje',
     level: 'solido',
     note: 'Sistemas de gestión: inventario, reservas, cartelera.',
-    color: '#7a5bd9',
+    color: '#512bd4',
   },
   {
     id: 'dart',
     name: 'Dart',
     category: 'lenguaje',
     level: 'solido',
-    color: '#3aa8b8',
+    color: '#0175c2',
   },
 
   // ── Frontend ──
@@ -91,14 +95,14 @@ export const stack: Tech[] = [
     name: 'HTML y CSS',
     category: 'frontend',
     level: 'fuerte',
-    color: '#d97a4a',
+    color: '#e34f26',
   },
   {
     id: 'vue',
     name: 'Vue',
     category: 'frontend',
     level: 'aprendiendo',
-    color: '#4aa87a',
+    color: '#4fc08d',
   },
   {
     id: 'three',
@@ -107,7 +111,7 @@ export const stack: Tech[] = [
     level: 'aprendiendo',
     note: 'El cuarto que estás recorriendo.',
     projects: ['portafolio'],
-    color: '#8c8c8c',
+    color: '#b9c2cc',
   },
 
   // ── Backend ──
@@ -116,14 +120,14 @@ export const stack: Tech[] = [
     name: '.NET',
     category: 'backend',
     level: 'solido',
-    color: '#6b5bd9',
+    color: '#512bd4',
   },
   {
     id: 'node',
     name: 'Node.js',
     category: 'backend',
     level: 'solido',
-    color: '#5b9c4a',
+    color: '#5fa04e',
   },
 
   // ── Móvil ──
@@ -133,7 +137,7 @@ export const stack: Tech[] = [
     category: 'movil',
     level: 'solido',
     note: 'Aplicaciones móviles multiplataforma.',
-    color: '#3a8cb8',
+    color: '#02569b',
   },
 
   // ── DevOps ──
@@ -143,7 +147,7 @@ export const stack: Tech[] = [
     category: 'devops',
     level: 'fuerte',
     note: 'Contenedores y Docker Compose en varios proyectos.',
-    color: '#3a8cd9',
+    color: '#2496ed',
   },
   {
     id: 'cicd',
@@ -151,7 +155,7 @@ export const stack: Tech[] = [
     category: 'devops',
     level: 'solido',
     note: 'Pipelines de integración y entrega continua.',
-    color: '#4a9c9c',
+    color: '#4a9eff',
   },
   {
     id: 'ansible',
@@ -159,14 +163,14 @@ export const stack: Tech[] = [
     category: 'devops',
     level: 'solido',
     note: 'Automatización de configuración de servidores.',
-    color: '#c74a4a',
+    color: '#ee0000',
   },
   {
     id: 'nginx',
     name: 'Nginx',
     category: 'devops',
     level: 'solido',
-    color: '#4a9c5b',
+    color: '#009639',
   },
   {
     id: 'monitoreo',
@@ -174,13 +178,13 @@ export const stack: Tech[] = [
     category: 'devops',
     level: 'aprendiendo',
     note: 'Monitoreo y visualización de métricas.',
-    color: '#d97a3a',
+    color: '#f46800',
   },
   {
     id: 'git',
     name: 'Git y GitFlow',
     category: 'devops',
     level: 'fuerte',
-    color: '#d95b3a',
+    color: '#f05032',
   },
 ]

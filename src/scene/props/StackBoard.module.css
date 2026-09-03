@@ -1,0 +1,141 @@
+/*
+ * Tablero del stack, dibujado a 1150 × 820 px y encogido hasta medir 1 m en
+ * la escena. Igual que el monitor: los píxeles de acá son unidades del
+ * tablero virtual, así que hay que diseñar con tipografía grande.
+ */
+
+.wrapper,
+.wrapper * {
+  /* drei pone pointer-events en línea en sus contenedores; ver MonitorScreen */
+  pointer-events: none !important;
+}
+
+.interactive,
+.interactive * {
+  pointer-events: auto !important;
+}
+
+.board {
+  width: 1150px;
+  height: 820px;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 46px;
+  box-sizing: border-box;
+  background: #1c232b;
+  color: #e8eef5;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  user-select: none;
+  overflow: hidden;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid rgb(232 238 245 / 0.14);
+}
+
+.title {
+  margin: 0;
+  font-size: 42px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.count {
+  font-size: 24px;
+  opacity: 0.5;
+}
+
+/*
+ * Diecisiete tecnologías en cinco columnas son cuatro filas. Las medidas de
+ * abajo están ajustadas para que la última fila y el botón entren completos:
+ * con logos de 72 px la última fila se cortaba.
+ */
+.grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px 14px;
+  align-content: center;
+  margin: 18px 0;
+  min-height: 0;
+}
+
+.tech {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+}
+
+/*
+ * Los SVG de Simple Icons son monocromos. Usarlos de máscara y pintar el
+ * fondo permite darles el color oficial de cada marca sin editar el archivo.
+ */
+.logo {
+  width: 56px;
+  height: 56px;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+}
+
+.name {
+  font-size: 19px;
+  line-height: 1.2;
+  opacity: 0.9;
+}
+
+.level {
+  font-size: 15px;
+  opacity: 0.5;
+}
+
+.foot {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 18px;
+  border-top: 2px solid rgb(232 238 245 / 0.14);
+}
+
+.hint {
+  font-size: 21px;
+  opacity: 0.45;
+}
+
+.expand {
+  padding: 13px 28px;
+  border: 0;
+  border-radius: 999px;
+  background: #e8eef5;
+  color: #141a20;
+  font: inherit;
+  font-size: 22px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.expand:hover {
+  background: #fff;
+}

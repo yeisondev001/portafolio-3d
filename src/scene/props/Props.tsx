@@ -30,6 +30,7 @@ import { useStore } from '../../store/useStore'
 import { Cables } from './Cables'
 import { Clock } from './Clock'
 import { MonitorScreen } from './MonitorScreen'
+import { StackBoard } from './StackBoard'
 
 const WOOD_DARK = '#5b4630'
 const METAL = '#2f2e2c'
@@ -289,6 +290,7 @@ const NOTES = [
 export function Props() {
   const goTo = useStore((s) => s.goTo)
   const openPanel = useStore((s) => s.openPanel)
+  const activeZone = useStore((s) => s.active)
 
   /** Objetos que abren algo al tocarlos: cursor de mano y clic */
   const clickable = (action: () => void) => ({
@@ -404,14 +406,34 @@ export function Props() {
         ))}
       </group>
 
-      {/* ── Pared este: la pizarra del stack ── */}
-      <Framed
-        position={[2.46, 1.6, -1.75]}
-        size={[1.15, 0.82, 0.035]}
-        rotation={[0, -Math.PI / 2, 0]}
-        inner="#dcd8ce"
-        onClick={() => goTo('stack')}
-      />
+      {/*
+        ── Pared este: el tablero del stack ──
+
+        El marco es una pieza y el contenido es HTML pegado a su cara, igual
+        que la pantalla del monitor. Los logos se ven desde la puerta; al
+        acercarse aparecen también los niveles.
+      */}
+      <group position={[2.46, 1.6, -1.75]} rotation={[0, -Math.PI / 2, 0]}>
+        <Piece
+          position={[0, 0, 0]}
+          size={[1.15, 0.82, 0.04]}
+          color={FRAME}
+          roughness={0.6}
+          radius={0.008}
+          onClick={(event) => {
+            if (activeZone === 'stack') return
+            event.stopPropagation()
+            goTo('stack')
+          }}
+          onPointerOver={() => {
+            if (activeZone !== 'stack') document.body.style.cursor = 'pointer'
+          }}
+          onPointerOut={() => {
+            document.body.style.cursor = 'auto'
+          }}
+        />
+        <StackBoard />
+      </group>
 
       {/*
         Pared oeste: la pintura decorativa.
