@@ -359,9 +359,14 @@ export function Props() {
       <Cables />
       <Clock position={[2.15, 2.3, -2.16]} />
 
-      {/* Alto sobre la pared oeste, corrido del rincón: pegado a la esquina
-          pisaba las dos paredes y se leía flotando */}
-      <AirConditioner position={[-2.39, 2.24, -0.75]} rotation={[0, Math.PI / 2, 0]} />
+      {/*
+        Alto sobre la pared oeste, cerca del rincón norte.
+
+        Mide 90 cm de ancho sobre el eje Z, así que con el centro en -1,65
+        llega hasta -2,10: quedan 10 cm hasta la pared norte. Acercarlo más
+        lo mete dentro de la esquina y se ve atravesando las dos paredes.
+      */}
+      <AirConditioner position={[-2.39, 2.24, -1.65]} rotation={[0, Math.PI / 2, 0]} />
 
       {/* ── Sobre el escritorio ── */}
       {/* Monitor, apenas girado hacia la silla */}
@@ -461,7 +466,13 @@ export function Props() {
         que la pantalla del monitor. Los logos se ven desde la puerta; al
         acercarse aparecen también los niveles.
       */}
-      <group position={[2.46, 1.6, -1.75]} rotation={[0, -Math.PI / 2, 0]}>
+      {/*
+        El tablero mide 1,15 m de ancho sobre Z. Centrado en -1,75 su borde
+        llegaba a -2,325 y la pared norte está en -2,2: se metía 12 cm dentro
+        de la esquina. Centrado en -1,50 termina en -2,075 y quedan 12 cm de
+        aire hasta la pared.
+      */}
+      <group position={[2.46, 1.6, -1.5]} rotation={[0, -Math.PI / 2, 0]}>
         <Piece
           position={[0, 0, 0]}
           size={[1.15, 0.82, 0.04]}

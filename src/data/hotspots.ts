@@ -119,9 +119,9 @@ export const HOTSPOTS: readonly Hotspot[] = [
   {
     id: 'stack',
     label: 'Stack',
-    camera: [1.35, 1.6, -1.75],
-    target: [2.5, 1.6, -1.75],
-    marker: [2.32, 1.6, -1.75],
+    camera: [1.35, 1.6, -1.5],
+    target: [2.5, 1.6, -1.5],
+    marker: [2.32, 1.6, -1.5],
     fitWidth: 1.05,
     // Sin panel: el stack se lee en el tablero mismo. El panel queda
     // detrás del botón "Ver en detalle".
