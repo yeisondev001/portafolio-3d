@@ -6,6 +6,12 @@
  * pero solo el autor sabe qué maneja de verdad y a qué nivel:
  * **hay que revisarla y corregirla antes de publicar.**
  *
+ * Los niveles son los más dudosos: salen de cuántos repos usan cada cosa, que
+ * no es lo mismo que saber. Kotlin sale de los 38 KB nativos de la grabadora
+ * de llamadas, y SQL Server de la descripción del repo de reservas de turnos
+ * —no hay otro repo con base de datos, así que ese nivel es el más flojo de
+ * todos los que hay acá.
+ *
  * Agregar una tecnología = agregar un objeto a este array (CLAUDE.md regla 4).
  */
 
@@ -88,6 +94,14 @@ export const stack: Tech[] = [
     level: 'solido',
     color: '#0175c2',
   },
+  {
+    id: 'kotlin',
+    name: 'Kotlin',
+    category: 'lenguaje',
+    level: 'aprendiendo',
+    note: 'La parte nativa de Android de la app grabadora de llamadas.',
+    color: '#7f52ff',
+  },
 
   // ── Frontend ──
   {
@@ -128,6 +142,14 @@ export const stack: Tech[] = [
     category: 'backend',
     level: 'solido',
     color: '#5fa04e',
+  },
+  {
+    id: 'sqlserver',
+    name: 'SQL Server',
+    category: 'backend',
+    level: 'solido',
+    note: 'La base de la app de reservas de turnos, detrás de una API en .NET.',
+    color: '#cc2927',
   },
 
   // ── Móvil ──
