@@ -111,13 +111,6 @@ const FURNITURE: {
   // Sur: la puerta
   { file: 'puerta', position: [0.6, 0, 2.16], scale: 0.5 },
 
-  // Aire acondicionado, alto sobre la pared oeste. Es de los objetos que
-  // más rápido dicen "esto es un cuarto de verdad" y ocupa pared vacía.
-  //
-  // Corrido del rincón a propósito: pegado a la esquina pisaba las dos
-  // paredes a la vez y se leía flotando.
-  { file: 'aire', position: [-2.14, 2.18, -0.75], rotation: [0, Math.PI / 2, 0], scale: 0.82 },
-
   // Rincón sureste y centro
   { file: 'planta', position: [2.1, 0, 1.7], scale: 2.2 },
   { file: 'alfombra', position: [0.15, 0.004, 0.1], rotation: [0, 0.16, 0], scale: 0.75 },
@@ -163,6 +156,57 @@ export function Piece({
     >
       <meshStandardMaterial color={color} roughness={roughness} metalness={metalness} />
     </RoundedBox>
+  )
+}
+
+/**
+ * Aire acondicionado split, del tipo que hay en una casa.
+ *
+ * Construido y no descargado: los modelos que encontré eran unidades
+ * exteriores o de galpón, con aspecto industrial. Un split de pared es una
+ * caja blanca redondeada con la rejilla y el deflector abajo — sale más
+ * preciso a mano que buscando el modelo correcto, y son cuatro piezas.
+ *
+ * Mide 90 × 28 × 20 cm, que es el tamaño real de un equipo chico.
+ * Modelado mirando hacia +Z; el giro lo pone contra la pared que toque.
+ */
+function AirConditioner({ position, rotation }: { position: Vec3; rotation?: Vec3 }) {
+  return (
+    <group position={position} rotation={rotation}>
+      {/* Cuerpo */}
+      <Piece
+        position={[0, 0, 0]}
+        size={[0.9, 0.28, 0.2]}
+        color="#f4f2ee"
+        roughness={0.55}
+        radius={0.05}
+      />
+      {/* Boca de salida, hundida en el frente inferior */}
+      <Piece
+        position={[0, -0.088, 0.096]}
+        size={[0.78, 0.055, 0.02]}
+        color="#c8c5c0"
+        roughness={0.85}
+        radius={0.008}
+      />
+      {/* Deflector, apenas inclinado como cuando está apagado */}
+      <Piece
+        position={[0, -0.112, 0.082]}
+        rotation={[-0.3, 0, 0]}
+        size={[0.78, 0.028, 0.085]}
+        color="#eceae5"
+        roughness={0.5}
+        radius={0.01}
+      />
+      {/* Lucecita de encendido */}
+      <Piece
+        position={[0.3, -0.052, 0.101]}
+        size={[0.05, 0.012, 0.008]}
+        color="#7fd4a0"
+        roughness={0.3}
+        radius={0.004}
+      />
+    </group>
   )
 }
 
@@ -314,6 +358,10 @@ export function Props() {
 
       <Cables />
       <Clock position={[2.15, 2.3, -2.16]} />
+
+      {/* Alto sobre la pared oeste, corrido del rincón: pegado a la esquina
+          pisaba las dos paredes y se leía flotando */}
+      <AirConditioner position={[-2.39, 2.24, -0.75]} rotation={[0, Math.PI / 2, 0]} />
 
       {/* ── Sobre el escritorio ── */}
       {/* Monitor, apenas girado hacia la silla */}
