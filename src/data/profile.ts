@@ -14,7 +14,7 @@ export const profile = {
 
   email: 'tumail@ejemplo.com',
   linkedin: 'https://www.linkedin.com/in/yeison-rojas-henriquez',
-  github: 'https://github.com/usuario',
+  github: 'https://github.com/yeisondev001',
   cv: '/cv.pdf',
 
   // Disponibilidad — vive en el panel Sobre mí desde que el cuarto no tiene ventana
