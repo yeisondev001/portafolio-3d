@@ -13,7 +13,7 @@ export const profile = {
     'interesa el camino completo entre el código y el servidor.',
 
   email: 'tumail@ejemplo.com',
-  linkedin: 'https://linkedin.com/in/usuario',
+  linkedin: 'https://www.linkedin.com/in/yeison-rojas-henriquez',
   github: 'https://github.com/usuario',
   cv: '/cv.pdf',
 
