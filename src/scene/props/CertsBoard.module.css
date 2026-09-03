@@ -1,0 +1,143 @@
+/*
+ * Mural de certificaciones, dibujado a 1200 × 844 px y encogido hasta medir
+ * 1,276 m: el ancho de la lámina interior del marco. Los píxeles de acá son
+ * unidades del mural, no de la pantalla.
+ *
+ * La proporción del lienzo tiene que seguir a la de la lámina (0,88 del marco
+ * en los dos ejes). Si cambia el tamaño del marco en Props.tsx, cambia acá.
+ */
+
+.wrapper,
+.wrapper * {
+  /* drei pone pointer-events en línea en sus contenedores; ver MonitorScreen */
+  pointer-events: none !important;
+}
+
+.interactive,
+.interactive * {
+  pointer-events: auto !important;
+}
+
+.board {
+  width: 1200px;
+  height: 844px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 46px 46px 40px;
+  box-sizing: border-box;
+  /* Cartón de passe-partout, no blanco: el marco es de museo barato, no de imprenta */
+  background: #e6ded0;
+  color: #2b2721;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  user-select: none;
+  overflow: hidden;
+}
+
+/*
+ * Flexbox y no grid: la última fila casi nunca viene completa y con grid
+ * quedaría pegada a la izquierda. Así se centra sola.
+ */
+.grid {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  gap: 26px;
+}
+
+.cert {
+  /* Tres por fila: 348 × 3 + 26 × 2 = 1096, y hay 1108 de ancho útil */
+  width: 348px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.interactive .cert {
+  cursor: pointer;
+}
+
+.interactive .cert:hover .scan,
+.interactive .cert:focus-visible .scan {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgb(43 39 33 / 0.22);
+}
+
+/*
+ * `contain` y no `cover`: un diploma recortado deja de ser un documento.
+ * Cada emisor usa una proporción distinta, así que el sobrante se rellena
+ * con papel y queda como una hoja dentro del marco.
+ */
+.scan {
+  width: 100%;
+  height: 220px;
+  display: grid;
+  place-items: center;
+  object-fit: contain;
+  background: #fbfaf7;
+  border: 1px solid rgb(43 39 33 / 0.16);
+  box-shadow: 0 2px 6px rgb(43 39 33 / 0.14);
+  font-size: 62px;
+  color: rgb(255 255 255 / 0.9);
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.name {
+  font-size: 19px;
+  line-height: 1.2;
+}
+
+.issuer {
+  font-size: 16px;
+  opacity: 0.5;
+}
+
+/*
+ * El pie aparece solo de cerca, igual que en el tablero del stack: de lejos
+ * es texto ilegible que hace ver el mural como una página web.
+ */
+.foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 14px;
+  border-top: 2px solid rgb(43 39 33 / 0.16);
+}
+
+.label {
+  font-size: 19px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.4;
+}
+
+.more {
+  padding: 0;
+  border: 0;
+  border-bottom: 2px solid rgb(43 39 33 / 0.35);
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 21px;
+  cursor: pointer;
+}
+
+.more:hover {
+  border-bottom-color: rgb(43 39 33 / 0.8);
+}

@@ -72,13 +72,38 @@
   gap: 30px;
 }
 
+/*
+ * Cada tecnología es un <button>. Los estilos propios del botón se anulan
+ * para que siga leyéndose como una calcomanía pegada al tablero y no como un
+ * control de formulario.
+ */
 .tech {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 7px;
   width: 116px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
   text-align: center;
+}
+
+/* De lejos el tablero no se toca, así que tampoco cambia el cursor */
+.interactive .tech {
+  cursor: pointer;
+}
+
+.interactive .tech:hover .logo,
+.interactive .tech:focus-visible .logo {
+  transform: scale(1.12);
+}
+
+.interactive .tech:hover .name,
+.interactive .tech:focus-visible .name {
+  opacity: 1;
 }
 
 /*
@@ -94,12 +119,14 @@
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
   -webkit-mask-size: contain;
+  transition: transform 140ms ease;
 }
 
 .name {
   font-size: 17px;
   line-height: 1.2;
   opacity: 0.72;
+  transition: opacity 140ms ease;
 }
 
 /*

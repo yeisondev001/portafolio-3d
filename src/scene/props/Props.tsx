@@ -22,12 +22,14 @@
  * al que va pegada la interfaz de proyectos, con precisión), los diplomas, la
  * pizarra y los objetos chiquitos del escritorio.
  */
+import type { ReactNode } from 'react'
 import { useGLTF, RoundedBox } from '@react-three/drei'
 import type { ThreeEvent } from '@react-three/fiber'
 import type { HotspotId } from '../../data/hotspots'
 import { profile } from '../../data/profile'
 import { useStore } from '../../store/useStore'
 import { Cables } from './Cables'
+import { CertsBoard } from './CertsBoard'
 import { Clock } from './Clock'
 import { MonitorScreen } from './MonitorScreen'
 import { StackBoard } from './StackBoard'
@@ -217,12 +219,15 @@ function Framed({
   rotation,
   inner = PAPER,
   onClick,
+  children,
 }: {
   position: Vec3
   size: Vec3
   rotation?: Vec3
   inner?: string
   onClick?: () => void
+  /** Lo que va pegado a la lámina: el mural de diplomas, por ejemplo */
+  children?: ReactNode
 }) {
   const [w, h, d] = size
   const interactive = onClick
@@ -256,6 +261,10 @@ function Framed({
         radius={0.003}
         {...interactive}
       />
+
+      {/* Justo delante de la cara de la lámina: d * 0.5 la centra, d * 0.07 es
+          su media altura, y 2 mm más evitan que peleen por el mismo píxel */}
+      {children && <group position={[0, 0, d * 0.57 + 0.002]}>{children}</group>}
     </group>
   )
 }
@@ -428,15 +437,20 @@ export function Props() {
         falta una superficie LIMPIA donde después van los diplomas escaneados.
         Una pintura decorativa como contenedor de certificaciones no dice nada.
 
-        TODO: cuando lleguen los escaneos, la lámina interior lleva la imagen
-        del diploma en vez del color plano.
+        Adentro va CertsBoard: los diplomas escaneados, como HTML pegado a la
+        lámina. Mismo recurso que el tablero del stack — de lejos son manchas
+        de papel, de cerca se leen de verdad.
       */}
       <Framed
         position={[1.15, 1.62, -2.16]}
         size={[1.45, 1.02, 0.06]}
         inner="#e0d8c8"
-        onClick={() => goTo('certificaciones')}
-      />
+        onClick={() => {
+          if (activeZone !== 'certificaciones') goTo('certificaciones')
+        }}
+      >
+        <CertsBoard />
+      </Framed>
 
       {/* Cartel con nombre y rol, arriba del escritorio */}
       <Framed position={[-0.9, 2.28, -2.17]} size={[1.0, 0.22, 0.03]} inner="#d9d2c4" />

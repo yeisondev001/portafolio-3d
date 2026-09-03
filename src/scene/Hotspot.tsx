@@ -9,7 +9,7 @@ export function Hotspot({ data }: { data: HotspotData }) {
 
   // Ni el punto donde ya estás parado, ni los que se alcanzan haciendo
   // clic sobre un objeto de la escena
-  if (active === data.id || data.hidden) return null
+  if (active === data.id || data.hidden || !data.marker) return null
 
   return (
     <Html position={data.marker} center zIndexRange={[20, 0]}>

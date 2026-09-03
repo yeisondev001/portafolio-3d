@@ -219,3 +219,19 @@
 .copy:focus-visible {
   background: rgb(255 255 255 / 0.14);
 }
+
+/* La ficha desde la que se abrió el panel. Ver StackPanel.module.css */
+.cardFocus {
+  border-color: rgb(255 255 255 / 0.4);
+  background: rgb(255 255 255 / 0.1);
+}
+
+/*
+ * Escaneo de un diploma. `contain` y no el `cover` de las miniaturas: un
+ * documento recortado deja de ser un documento, y cada emisor usa una
+ * proporción distinta. El sobrante se rellena con papel.
+ */
+.scan {
+  object-fit: contain;
+  background: #fbfaf7;
+}

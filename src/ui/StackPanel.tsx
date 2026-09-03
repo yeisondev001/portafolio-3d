@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import {
   CATEGORY_LABEL,
   CATEGORY_ORDER,
@@ -5,6 +6,7 @@ import {
   stack,
   type Level,
 } from '../data/stack'
+import { useStore } from '../store/useStore'
 import { Panel } from './Panel'
 import styles from './StackPanel.module.css'
 
@@ -15,6 +17,16 @@ const LEVEL_CLASS: Record<Level, string> = {
 }
 
 export default function StackPanel() {
+  const focus = useStore((s) => s.panelFocus)
+
+  /*
+   * Ref de callback y no useEffect: el panel se monta de cero cada vez que se
+   * abre, así que esto corre una sola vez, justo cuando la ficha existe.
+   */
+  const scrollToFocus = useCallback((node: HTMLElement | null) => {
+    node?.scrollIntoView({ block: 'center' })
+  }, [])
+
   return (
     <Panel title="Stack" subtitle={`${stack.length} tecnologías`}>
       <p className={styles.legend}>
@@ -38,7 +50,8 @@ export default function StackPanel() {
               {items.map((tech) => (
                 <article
                   key={tech.id}
-                  className={styles.card}
+                  ref={tech.id === focus ? scrollToFocus : undefined}
+                  className={`${styles.card} ${tech.id === focus ? styles.cardFocus : ''}`}
                   style={{ borderLeftColor: tech.color }}
                 >
                   <span

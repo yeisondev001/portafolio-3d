@@ -1,15 +1,33 @@
+import { useCallback } from 'react'
 import { certifications } from '../data/certifications'
+import { useStore } from '../store/useStore'
 import { Panel } from './Panel'
 import styles from './Content.module.css'
 
 export default function CertsPanel() {
+  const focus = useStore((s) => s.panelFocus)
+
+  // Ver StackPanel: ref de callback porque el panel se monta de cero
+  const scrollToFocus = useCallback((node: HTMLElement | null) => {
+    node?.scrollIntoView({ block: 'center' })
+  }, [])
+
   return (
     <Panel title="Certificaciones" subtitle={`${certifications.length} certificaciones`}>
       <div className={styles.grid}>
         {certifications.map((cert) => (
-          <article key={cert.id} className={styles.card}>
+          <article
+            key={cert.id}
+            ref={cert.id === focus ? scrollToFocus : undefined}
+            className={`${styles.card} ${cert.id === focus ? styles.cardFocus : ''}`}
+          >
             {cert.image ? (
-              <img className={styles.thumb} src={cert.image} alt={cert.name} loading="lazy" />
+              <img
+                className={`${styles.thumb} ${styles.scan}`}
+                src={cert.image}
+                alt={`Certificado de ${cert.name}, ${cert.issuer}`}
+                loading="lazy"
+              />
             ) : (
               <div
                 className={styles.thumb}

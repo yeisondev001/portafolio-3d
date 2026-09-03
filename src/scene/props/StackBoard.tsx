@@ -12,6 +12,10 @@ import styles from './StackBoard.module.css'
  *
  * Los logos son de Simple Icons (CC0). Vienen monocromos, así que se usan de
  * máscara y se pintan con el color de cada marca — ver el CSS.
+ *
+ * De cerca cada logo es un botón: abre el panel en esa tecnología. Antes solo
+ * respondía el enlace del pie, así que tocar un logo —que es lo primero que
+ * uno hace— no pasaba nada.
  */
 
 /** Ancho del tablero en la escena, en metros */
@@ -80,10 +84,13 @@ export function StackBoard() {
               <h3 className={styles.label}>{group.label}</h3>
               <div className={styles.row}>
                 {items.map((tech) => (
-                  <span
+                  <button
                     key={tech.id}
+                    type="button"
                     className={styles.tech}
                     style={{ transform: `rotate(${tilt(tech.id)}deg)` }}
+                    onClick={() => openPanel('stack', tech.id)}
+                    aria-label={`Ver ${tech.name} en detalle`}
                   >
                     <span
                       className={styles.logo}
@@ -95,7 +102,7 @@ export function StackBoard() {
                       aria-hidden="true"
                     />
                     <span className={styles.name}>{tech.name}</span>
-                  </span>
+                  </button>
                 ))}
               </div>
             </section>

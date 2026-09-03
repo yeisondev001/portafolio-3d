@@ -39,8 +39,14 @@ export type Hotspot = {
   camera: [number, number, number]
   /** Hacia dónde mira */
   target: [number, number, number]
-  /** Dónde flota el puntito clickeable en la escena */
-  marker: [number, number, number]
+  /**
+   * Dónde flota el puntito clickeable en la escena.
+   *
+   * Sin marker no se dibuja ningún puntito: al punto se llega tocando un
+   * objeto del cuarto o desde la barra. Distinto de `hidden`, que además lo
+   * saca de la barra.
+   */
+  marker?: [number, number, number]
   /** Panel que abre al llegar, si abre alguno */
   panel: PanelId | null
   /** Segundos que dura el viaje */
@@ -84,7 +90,18 @@ export const HOTSPOTS: readonly Hotspot[] = [
     label: 'Escritorio',
     camera: [-0.9, 1.24, -1.02],
     target: [-0.9, 1.04, -1.98],
-    marker: [-0.9, 1.42, -1.9],
+    /*
+     * Sin puntito propio a propósito.
+     *
+     * Flotaba a 16 cm por encima del monitor y desde la puerta le quedaban
+     * entre 6 y 10 px de holgura, según la ventana. Como es HTML por encima
+     * del canvas, el puntito siempre le gana el clic a la geometría: apuntarle
+     * al monitor caía en el puntito, y hacían falta dos clics para llegar.
+     *
+     * El monitor entero ya es clickeable y lleva derecho a su acercamiento,
+     * que es lo que uno quiere del escritorio. El punto sigue estando en la
+     * barra de navegación y es a donde se vuelve al cerrar los proyectos.
+     */
     // Sin panel automático: al llegar se elige entre monitor, celular y carpeta
     panel: null,
   },
@@ -114,7 +131,11 @@ export const HOTSPOTS: readonly Hotspot[] = [
     camera: [1.15, 1.62, -1.15],
     target: [1.15, 1.62, -2.2],
     marker: [1.15, 1.62, -2.05],
-    panel: 'certificaciones',
+    // El marco mide 1,45 m; con algo de aire alrededor entra entero en cuadro
+    fitWidth: 1.55,
+    // Sin panel: los diplomas se leen en el mural mismo, igual que el stack en
+    // su tablero. El panel queda detrás de "Ver todas en detalle".
+    panel: null,
   },
   {
     id: 'stack',

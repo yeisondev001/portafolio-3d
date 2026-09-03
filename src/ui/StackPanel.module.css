@@ -104,3 +104,13 @@
 .barAprendiendo {
   background: rgb(232 220 196 / 0.28);
 }
+
+/*
+ * La ficha desde la que se abrió el panel. Con 17 tecnologías, llegar y
+ * tener que buscar a mano la que acabás de tocar en el tablero es un paso
+ * de más.
+ */
+.cardFocus {
+  border-color: rgb(255 255 255 / 0.4);
+  background: rgb(255 255 255 / 0.1);
+}

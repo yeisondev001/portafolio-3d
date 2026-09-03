@@ -122,6 +122,10 @@ se rompió: avisar antes de seguir.
   que falte no se pide hasta que React llega a él y mientras tanto bloquea al
   resto de la escena.
 - Texturas: `.ktx2` para lo que va en la escena, `.webp` para las capturas de los paneles.
+- Certificaciones: el diploma se agrega con
+  `node scripts/preparar-certificaciones.mjs <id> <archivo.pdf>`. El `id` tiene que
+  ser el mismo de `src/data/certifications.ts`. Los PDF los rasteriza Poppler
+  (`pdftoppm`), que se instala aparte y solo hace falta al preparar el archivo.
 - Todo en `public/`, referenciado por ruta absoluta (`/models/cuarto.glb`).
 - Antes de sumar un modelo nuevo, verificar el presupuesto de triángulos.
 
