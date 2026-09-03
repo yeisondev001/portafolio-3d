@@ -25,7 +25,7 @@ export default function ContactPanel() {
   }
 
   return (
-    <Panel title="Contacto" subtitle="Escribime por donde te quede cómodo">
+    <Panel lift title="Contacto" subtitle="Escribime por donde te quede cómodo">
       <ul className={styles.contacts}>
         <li>
           <a className={styles.contact} href={`mailto:${profile.email}`}>

@@ -19,6 +19,7 @@ export function Hotspot({ data }: { data: HotspotData }) {
         onClick={() => goTo(data.id)}
         aria-label={`Ir a ${data.label}`}
       >
+        <span className={styles.pip} aria-hidden="true" />
         <span className={styles.label}>{data.label}</span>
       </button>
     </Html>

@@ -11,6 +11,7 @@ const AboutPanel = lazy(() => import('./ui/AboutPanel'))
 const ContactPanel = lazy(() => import('./ui/ContactPanel'))
 const CertsPanel = lazy(() => import('./ui/CertsPanel'))
 const CareerPanel = lazy(() => import('./ui/CareerPanel'))
+const CvPanel = lazy(() => import('./ui/CvPanel'))
 
 export function App() {
   const panel = useStore((s) => s.panel)
@@ -26,6 +27,7 @@ export function App() {
         {panel === 'contacto' && <ContactPanel />}
         {panel === 'certificaciones' && <CertsPanel />}
         {panel === 'trayectoria' && <CareerPanel />}
+        {panel === 'cv' && <CvPanel />}
       </Suspense>
     </>
   )

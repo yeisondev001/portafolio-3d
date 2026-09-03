@@ -23,16 +23,16 @@
  * pizarra y los objetos chiquitos del escritorio.
  */
 import type { ReactNode } from 'react'
-import { useGLTF, RoundedBox } from '@react-three/drei'
+import { Html, useGLTF, RoundedBox } from '@react-three/drei'
 import type { ThreeEvent } from '@react-three/fiber'
 import type { HotspotId } from '../../data/hotspots'
-import { profile } from '../../data/profile'
 import { useStore } from '../../store/useStore'
 import { Cables } from './Cables'
 import { CertsBoard } from './CertsBoard'
 import { Clock } from './Clock'
 import { MonitorScreen } from './MonitorScreen'
 import { StackBoard } from './StackBoard'
+import tags from './Tag.module.css'
 
 const WOOD_DARK = '#5b4630'
 const METAL = '#2f2e2c'
@@ -212,6 +212,23 @@ function AirConditioner({ position, rotation }: { position: Vec3; rotation?: Vec
   )
 }
 
+/**
+ * Etiqueta flotante de un objeto del escritorio.
+ *
+ * Al llegar al escritorio hay tres cosas para elegir —monitor, celular y
+ * carpeta— pero dos son chicas y oscuras, y sin nombre no se leen como
+ * opciones. El monitor no lleva etiqueta: ya dice "Proyectos" en su pantalla.
+ */
+function Tag({ position, label, onClick }: { position: Vec3; label: string; onClick: () => void }) {
+  return (
+    <Html position={position} center zIndexRange={[12, 0]}>
+      <button type="button" className={tags.tag} onClick={onClick}>
+        {label}
+      </button>
+    </Html>
+  )
+}
+
 /** Marco con lámina adentro: diplomas, pizarra, pósters, cartel */
 function Framed({
   position,
@@ -383,8 +400,45 @@ export function Props() {
         <Monitor />
       </group>
 
-      {/* Teclado, girado igual que el monitor */}
-      <Mueble file="teclado" position={[-0.9, 0.758, -1.72]} rotation={[0, -0.16, 0]} scale={1.56} />
+      {/*
+        Teclado, girado igual que el monitor.
+
+        El modelo tiene el origen en su borde derecho y mide 44 cm: puesto en
+        -0,9 ocupaba de -1,34 a -0,90, o sea entero a la izquierda del monitor.
+        En -0,68 queda de -1,12 a -0,68, centrado bajo la pantalla, y libera
+        la mitad derecha del escritorio.
+      */}
+      <Mueble file="teclado" position={[-0.68, 0.758, -1.72]} rotation={[0, -0.16, 0]} scale={1.56} />
+
+      {/* Mouse, a la derecha del teclado. Había teclado y no había mouse:
+          es lo primero que el ojo nota y no tiene explicación posible. */}
+      <Piece
+        position={[-0.5, 0.762, -1.63]}
+        rotation={[0, -0.1, 0]}
+        size={[0.062, 0.03, 0.105]}
+        color={METAL}
+        roughness={0.35}
+        radius={0.014}
+      />
+
+      {/* Cuaderno y lapicera, en el frente derecho: la esquina que quedaba
+          pelada desde cualquier punto del cuarto */}
+      <group position={[-0.3, 0, -1.63]} rotation={[0, 0.34, 0]}>
+        <Piece position={[0, 0.755, 0]} size={[0.16, 0.016, 0.22]} color="#8c7a5b" roughness={0.85} radius={0.004} />
+        <Piece position={[0.01, 0.767, 0.02]} size={[0.008, 0.008, 0.135]} color="#2f2e2c" roughness={0.3} radius={0.004} />
+      </group>
+
+      {/*
+        Pila de libros, entre el velador y el monitor.
+
+        Es el único hueco del escritorio que se ve desde la puerta: la silla
+        y el avatar tapan toda la mitad derecha, así que el mouse, la carpeta
+        y el cuaderno solo aparecen al acercarse.
+      */}
+      <group position={[-1.25, 0, -2.06]} rotation={[0, 0.22, 0]}>
+        <Piece position={[0, 0.775, 0]} size={[0.185, 0.045, 0.245]} color="#6b4f3f" roughness={0.9} radius={0.004} />
+        <Piece position={[0.012, 0.817, 0.014]} rotation={[0, -0.12, 0]} size={[0.17, 0.038, 0.23]} color="#4a6b6b" roughness={0.9} radius={0.004} />
+      </group>
 
       {/* Velador: la fuente cálida dominante */}
       <Mueble file="velador" position={[-1.52, 0.755, -1.98]} rotation={[0, 0.4, 0]} scale={0.8} />
@@ -400,10 +454,22 @@ export function Props() {
         {...clickable(() => openPanel('contacto'))}
       />
 
+      {/* Las etiquetas solo existen estando en el escritorio: de lejos
+          serían dos puntitos más peleándole el clic al monitor */}
+      {activeZone === 'escritorio' && (
+        <>
+          <Tag position={[-0.32, 0.85, -1.78]} label="Contacto" onClick={() => openPanel('contacto')} />
+          <Tag position={[-0.42, 0.88, -2.02]} label="CV" onClick={() => openPanel('cv')} />
+        </>
+      )}
+
       {/*
-        Carpeta: descarga directa del CV, sin panel intermedio (SPEC §5).
-        Un ancla creada al vuelo es la forma de disparar una descarga desde
-        un objeto 3D, que no puede ser un <a> de verdad.
+        Carpeta: levanta el CV y se lee sin salir del sitio.
+
+        Antes disparaba la descarga a ciegas, con un ancla creada al vuelo.
+        Bajaba un archivo que el visitante nunca había visto, y en celular
+        eso es peor todavía: se va del cuarto a un visor de PDF del sistema.
+        Ahora la descarga es un botón dentro del panel, no la única salida.
       */}
       <Piece
         position={[-0.42, 0.775, -2.02]}
@@ -412,12 +478,7 @@ export function Props() {
         color={PAPER}
         roughness={0.95}
         radius={0.006}
-        {...clickable(() => {
-          const link = document.createElement('a')
-          link.href = profile.cv
-          link.download = ''
-          link.click()
-        })}
+        {...clickable(() => openPanel('cv'))}
       />
 
       {/* Taza: el objeto que dice que acá vive alguien */}

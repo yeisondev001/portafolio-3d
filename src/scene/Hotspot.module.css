@@ -2,38 +2,68 @@
  * El puntito es HTML, no geometría 3D. Así el pulso lo anima CSS y no hace
  * falta pedir frames continuos al canvas (CLAUDE.md regla 2), y además es un
  * <button> real: accesible con Tab y con lector de pantalla (SPEC §9).
+ *
+ * El nombre se ve siempre, no al pasar por encima.
+ *
+ * Antes aparecía en hover, y en celular el hover no existe: el nombre no se
+ * veía nunca. Y aun con mouse, un círculo blanco flotando no dice que se
+ * pueda tocar — lo sabías si ya lo sabías. Una pastilla con texto sí.
+ *
+ * El costo es que el área de clic pasa de 44 px a unos 136: al mover un punto
+ * hay que medir la pastilla entera contra los objetos que tenga cerca, no
+ * solo el círculo. Ver el comentario del escritorio en hotspots.ts.
  */
 
 .dot {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 44px; /* área de toque cómoda en celular */
-  height: 44px;
-  padding: 0;
-  border: 0;
-  background: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 40px;
+  padding: 0 15px 0 12px;
+  border: 1px solid rgb(255 255 255 / 0.34);
+  border-radius: 999px;
+  background: rgb(16 13 11 / 0.62);
+  backdrop-filter: blur(4px);
+  color: #f2ede6;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  font-size: 13.5px;
+  white-space: nowrap;
   cursor: pointer;
-  color: #fff;
-  font: inherit;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease;
 }
 
-.dot::before {
-  content: '';
-  position: absolute;
-  width: 14px;
-  height: 14px;
+.dot:hover,
+.dot:focus-visible {
+  border-color: rgb(255 255 255 / 0.85);
+  background: rgb(16 13 11 / 0.9);
+}
+
+.dot:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* El círculo que late, ahora adentro de la pastilla */
+.pip {
+  position: relative;
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 0 0 4px rgb(255 255 255 / 0.25);
-  transition: transform 0.18s ease;
 }
 
-.dot::after {
+.pip::after {
   content: '';
   position: absolute;
-  width: 14px;
-  height: 14px;
+  inset: 0;
   border-radius: 50%;
   border: 2px solid rgb(255 255 255 / 0.8);
   animation: pulse 2.4s ease-out infinite;
@@ -53,41 +83,12 @@
   }
 }
 
-.dot:hover::before,
-.dot:focus-visible::before {
-  transform: scale(1.35);
-}
-
-.dot:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 4px;
-  border-radius: 50%;
-}
-
 .label {
-  position: absolute;
-  top: 100%;
-  white-space: nowrap;
-  padding: 3px 9px;
-  border-radius: 999px;
-  background: rgb(0 0 0 / 0.65);
-  font-size: 12px;
-  opacity: 0;
-  transform: translateY(-4px);
-  transition:
-    opacity 0.18s ease,
-    transform 0.18s ease;
-  pointer-events: none;
-}
-
-.dot:hover .label,
-.dot:focus-visible .label {
-  opacity: 1;
-  transform: translateY(0);
+  line-height: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dot::after {
+  .pip::after {
     animation: none;
   }
 }

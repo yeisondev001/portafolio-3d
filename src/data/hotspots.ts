@@ -25,6 +25,7 @@ export type HotspotId =
 
 export type PanelId =
   | 'proyectos'
+  | 'cv'
   | 'sobre-mi' // incluye disponibilidad
   | 'contacto'
   | 'certificaciones'
@@ -91,17 +92,19 @@ export const HOTSPOTS: readonly Hotspot[] = [
     camera: [-0.9, 1.24, -1.02],
     target: [-0.9, 1.04, -1.98],
     /*
-     * Sin puntito propio a propósito.
+     * Sobre el extremo izquierdo del escritorio, al lado del velador.
      *
-     * Flotaba a 16 cm por encima del monitor y desde la puerta le quedaban
-     * entre 6 y 10 px de holgura, según la ventana. Como es HTML por encima
-     * del canvas, el puntito siempre le gana el clic a la geometría: apuntarle
-     * al monitor caía en el puntito, y hacían falta dos clics para llegar.
+     * NO encima del monitor. Ahí flotaba antes, a 16 cm por arriba, y desde
+     * la puerta le quedaban entre 6 y 10 px de holgura según la ventana: como
+     * es HTML por encima del canvas, el puntito siempre le gana el clic a la
+     * geometría, así que apuntarle al monitor caía en el puntito y hacían
+     * falta dos clics para llegar.
      *
-     * El monitor entero ya es clickeable y lleva derecho a su acercamiento,
-     * que es lo que uno quiere del escritorio. El punto sigue estando en la
-     * barra de navegación y es a donde se vuelve al cerrar los proyectos.
+     * Acá va sobre la esquina delantera izquierda, lejos del monitor en los
+     * dos ejes. Le quedan entre 14 y 35 px de holgura, medido de 1440x900 a
+     * 420x780 y contando la pastilla entera con su nombre, no solo el punto.
      */
+    marker: [-1.52, 0.95, -1.62],
     // Sin panel automático: al llegar se elige entre monitor, celular y carpeta
     panel: null,
   },

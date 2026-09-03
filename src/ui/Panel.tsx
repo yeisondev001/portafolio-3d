@@ -12,10 +12,17 @@ import styles from './Panel.module.css'
 export function Panel({
   title,
   subtitle,
+  lift,
   children,
 }: {
   title: string
   subtitle?: string
+  /**
+   * El contenido se levanta desde abajo al abrirse, como si lo hubieras
+   * agarrado del escritorio. Para los objetos que se levantan de verdad:
+   * la carpeta del CV y el celular.
+   */
+  lift?: boolean
   children: ReactNode
 }) {
   const closePanel = useStore((s) => s.closePanel)
@@ -49,8 +56,8 @@ export function Panel({
         </button>
       </header>
 
-      <div className={styles.body}>
-        <div className={styles.inner}>{children}</div>
+      <div className={`${styles.body} ${lift ? styles.stage : ''}`}>
+        <div className={`${styles.inner} ${lift ? styles.lift : ''}`}>{children}</div>
       </div>
     </div>
   )

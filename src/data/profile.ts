@@ -6,6 +6,12 @@ export const profile = {
   name: 'Tu Nombre',
   role: 'Desarrollador Frontend',
 
+  /** Dos o tres líneas. Encabeza el CV. */
+  summary:
+    'Desarrollador web con foco en que lo que se construye llegue a producción ' +
+    'y se pueda mantener. Escribo la interfaz y armo los despliegues, y me ' +
+    'interesa el camino completo entre el código y el servidor.',
+
   email: 'tumail@ejemplo.com',
   linkedin: 'https://linkedin.com/in/usuario',
   github: 'https://github.com/usuario',
