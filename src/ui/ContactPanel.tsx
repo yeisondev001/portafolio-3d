@@ -9,6 +9,10 @@ import styles from './Content.module.css'
  * Sin formulario: exige backend y antispam, y casi nadie los usa (SPEC §5).
  * El mail se puede copiar de un toque, que es lo que hace la gente cuando ya
  * tiene su cliente de correo abierto en otra pestaña.
+ *
+ * Sin el currículum: tiene su propio objeto en el escritorio —la pila de
+ * papeles, al lado del celular— donde además se lee antes de bajarlo.
+ * Repetirlo acá ofrecía dos caminos al mismo archivo desde objetos vecinos.
  */
 export default function ContactPanel() {
   const [copied, setCopied] = useState(false)
@@ -69,14 +73,6 @@ export default function ContactPanel() {
           </a>
         </li>
 
-        <li>
-          <a className={styles.contact} href={profile.cv} download>
-            <span>
-              <span className={styles.contactLabel}>Currículum</span>
-              <span className={styles.contactValue}>Descargar en PDF</span>
-            </span>
-          </a>
-        </li>
       </ul>
     </Panel>
   )
