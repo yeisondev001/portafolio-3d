@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { HOTSPOTS } from '../data/hotspots'
 import { profile } from '../data/profile'
 import { useStore } from '../store/useStore'
@@ -18,6 +19,14 @@ export function Hud() {
   const active = useStore((s) => s.active)
   const goTo = useStore((s) => s.goTo)
   const traveling = useStore((s) => s.traveling)
+  const zones = useRef<HTMLElement>(null)
+
+  // En celular las zonas no entran todas y la barra scrollea. Si la activa
+  // queda fuera de vista, el visitante no ve dónde está parado.
+  useEffect(() => {
+    const actual = zones.current?.querySelector('[aria-current="true"]')
+    actual?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+  }, [active])
 
   return (
     <div className={styles.hud}>
@@ -44,6 +53,7 @@ export function Hud() {
       </header>
 
       <nav
+        ref={zones}
         className={`${styles.zones} ${traveling ? styles.zonesTraveling : ''}`}
         aria-label="Zonas del cuarto"
       >

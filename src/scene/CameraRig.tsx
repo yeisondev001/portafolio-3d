@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { Vector3 } from 'three'
+import type { PerspectiveCamera } from 'three'
 import { useStore } from '../store/useStore'
 import { ENTRADA, getHotspot } from '../data/hotspots'
 
@@ -10,6 +11,7 @@ const START_POS = new Vector3()
 const START_TARGET = new Vector3()
 const END_POS = new Vector3()
 const END_TARGET = new Vector3()
+const AWAY = new Vector3()
 
 const DEFAULT_DURATION = 1.6
 
@@ -52,6 +54,21 @@ export function CameraRig() {
     START_TARGET.copy(lookAt.current)
     END_POS.set(...hotspot.camera)
     END_TARGET.set(...hotspot.target)
+
+    // Alejarse si la ventana es angosta y el objeto no entraría a lo ancho
+    if (hotspot.fitWidth) {
+      const lens = camera as PerspectiveCamera
+      AWAY.copy(END_POS).sub(END_TARGET)
+      const base = AWAY.length()
+      AWAY.normalize()
+
+      const vertical = (lens.fov * Math.PI) / 180
+      const horizontal = 2 * Math.atan(Math.tan(vertical / 2) * lens.aspect)
+      // Un 6% de aire para que no quede pegado a los bordes
+      const needed = (hotspot.fitWidth / 2 / Math.tan(horizontal / 2)) * 1.06
+
+      END_POS.copy(END_TARGET).addScaledVector(AWAY, Math.max(base, needed))
+    }
     progress.current = 0
     duration.current = hotspot.duration ?? DEFAULT_DURATION
     setTraveling(true)

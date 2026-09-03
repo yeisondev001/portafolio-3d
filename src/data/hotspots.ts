@@ -50,6 +50,15 @@ export type Hotspot = {
    * sobre el objeto mismo. Es el caso del monitor.
    */
   hidden?: boolean
+  /**
+   * Ancho en metros que tiene que entrar completo en la pantalla.
+   *
+   * Sin esto la distancia se calcula contra el campo de visión vertical, y en
+   * un celular en vertical el horizontal es mucho menor: la pantalla del
+   * monitor se cortaba por los costados. Con esto la cámara se aleja lo
+   * necesario según la forma de la ventana.
+   */
+  fitWidth?: number
 }
 
 export const HOTSPOTS: readonly Hotspot[] = [
@@ -89,6 +98,7 @@ export const HOTSPOTS: readonly Hotspot[] = [
      */
     id: 'monitor',
     label: 'Proyectos',
+    fitWidth: 0.6,
     camera: [-0.962, 1.08, -1.597],
     target: [-0.902, 1.08, -1.967],
     marker: [-0.902, 1.08, -1.96],
