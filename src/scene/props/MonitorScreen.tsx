@@ -51,10 +51,7 @@ export function MonitorScreen() {
       zIndexRange={[8, 0]}
       wrapperClass={styles.wrapper}
     >
-      <div
-        className={styles.screen}
-        style={{ pointerEvents: interactive ? 'auto' : 'none' }}
-      >
+      <div className={`${styles.screen} ${interactive ? styles.interactive : ''}`}>
         {selected ? (
           <>
             <div className={styles.head}>

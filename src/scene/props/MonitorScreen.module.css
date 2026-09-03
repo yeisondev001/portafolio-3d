@@ -11,15 +11,33 @@
  */
 
 /*
- * drei envuelve el HTML en un contenedor que cubre todo el canvas. Si ese
- * contenedor captura el puntero, los clics nunca llegan a la escena 3D: no
- * se puede hacer clic en la pantalla para acercarse, ni cambia el cursor.
+ * drei no envuelve el HTML en un contenedor sino en CUATRO anidados, y dos de
+ * ellos traen `pointer-events: auto` y quedan exactamente sobre el rectángulo
+ * de la pantalla. Desactivar solo el de afuera no alcanzaba: esos dos se
+ * tragaban el clic, y el primer intento de entrar al monitor no hacía nada.
  *
- * Se lo desactiva acá y se reactiva solo en el contenido, y solo cuando la
- * cámara ya está encima del monitor.
+ * Por eso el selector va con `*`: apaga toda la cadena.
  */
-.wrapper {
-  pointer-events: none;
+.wrapper,
+.wrapper * {
+  /*
+   * El !important no es por comodidad: drei pone `pointer-events: auto` como
+   * estilo EN LÍNEA en uno de esos contenedores, y un estilo en línea le gana
+   * a cualquier regla de clase. Sin esto el contenedor sigue tragándose el
+   * clic sobre el monitor.
+   */
+  pointer-events: none !important;
+}
+
+/*
+ * Y se vuelve a encender la interfaz entera cuando la cámara ya está encima.
+ * Tiene que incluir los descendientes, o los botones de adentro quedarían
+ * apagados por la regla de arriba. Va después a propósito: misma
+ * especificidad, gana el orden.
+ */
+.interactive,
+.interactive * {
+  pointer-events: auto !important;
 }
 
 .screen {
