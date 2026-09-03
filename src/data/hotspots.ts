@@ -130,7 +130,15 @@ export const HOTSPOTS: readonly Hotspot[] = [
     label: 'Certificaciones',
     camera: [1.15, 1.62, -1.15],
     target: [1.15, 1.62, -2.2],
-    marker: [1.15, 1.62, -2.05],
+    /*
+     * Debajo del marco, no encima.
+     *
+     * En el centro del mural le tapaba el diploma del medio: el puntito es
+     * HTML por encima del canvas y siempre le gana el clic. Es el mismo
+     * problema que tenía el escritorio con el monitor. Acá abajo le quedan
+     * entre 17 y 27 px de holgura según la ventana.
+     */
+    marker: [1.15, 0.94, -2.14],
     // El marco mide 1,45 m; con algo de aire alrededor entra entero en cuadro
     fitWidth: 1.55,
     // Sin panel: los diplomas se leen en el mural mismo, igual que el stack en

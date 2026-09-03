@@ -13,19 +13,27 @@
   pointer-events: none !important;
 }
 
-.interactive,
-.interactive * {
+/*
+ * Los diplomas se tocan desde cualquier punto del cuarto, no solo de cerca:
+ * desde la puerta el mural mide unos 320 px y cada diploma unos 90 × 55, que
+ * es un objetivo de clic cómodo. Tocar uno de lejos viaja la cámara y lo abre.
+ *
+ * Solo los controles, no todo el mural: el resto de la lámina tiene que dejar
+ * pasar el clic hasta el marco 3D, que también lleva a las certificaciones.
+ */
+.cert,
+.back,
+.more {
   pointer-events: auto !important;
+  cursor: pointer;
 }
 
 .board {
   width: 1200px;
   height: 844px;
   display: flex;
-  flex-direction: column;
-  gap: 22px;
-  padding: 46px 46px 40px;
   box-sizing: border-box;
+  padding: 46px 46px 40px;
   /* Cartón de passe-partout, no blanco: el marco es de museo barato, no de imprenta */
   background: #e6ded0;
   color: #2b2721;
@@ -39,6 +47,17 @@
   overflow: hidden;
 }
 
+.all,
+.single {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-height: 0;
+}
+
+/* ── Todos los diplomas ────────────────────────────────────────────── */
+
 /*
  * Flexbox y no grid: la última fila casi nunca viene completa y con grid
  * quedaría pegada a la izquierda. Así se centra sola.
@@ -50,6 +69,7 @@
   justify-content: center;
   align-content: center;
   gap: 26px;
+  animation: volver 260ms ease both;
 }
 
 .cert {
@@ -66,12 +86,8 @@
   text-align: left;
 }
 
-.interactive .cert {
-  cursor: pointer;
-}
-
-.interactive .cert:hover .scan,
-.interactive .cert:focus-visible .scan {
+.cert:hover .scan,
+.cert:focus-visible .scan {
   transform: translateY(-3px);
   box-shadow: 0 8px 16px rgb(43 39 33 / 0.22);
 }
@@ -107,10 +123,89 @@
   opacity: 0.5;
 }
 
+/* ── Un solo diploma, en grande ────────────────────────────────────── */
+
 /*
- * El pie aparece solo de cerca, igual que en el tablero del stack: de lejos
- * es texto ilegible que hace ver el mural como una página web.
+ * Crece desde el tamaño de una miniatura hasta llenar el marco. Es CSS puro:
+ * no anima nada de la escena, así que no hace falta invalidate().
  */
+.single {
+  animation: abrir 320ms cubic-bezier(0.2, 0.8, 0.25, 1) both;
+}
+
+.singleHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.singleMeta {
+  font-size: 21px;
+  opacity: 0.55;
+  text-align: right;
+}
+
+.back {
+  padding: 0;
+  border: 0;
+  border-bottom: 2px solid rgb(43 39 33 / 0.35);
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 21px;
+  white-space: nowrap;
+}
+
+.back:hover {
+  border-bottom-color: rgb(43 39 33 / 0.8);
+}
+
+.big {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  object-fit: contain;
+  background: #fbfaf7;
+  border: 1px solid rgb(43 39 33 / 0.16);
+  box-shadow: 0 4px 14px rgb(43 39 33 / 0.2);
+  font-size: 190px;
+  color: rgb(255 255 255 / 0.9);
+}
+
+@keyframes abrir {
+  from {
+    opacity: 0;
+    transform: scale(0.78);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes volver {
+  from {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .single,
+  .grid {
+    animation: none;
+  }
+}
+
+/* ── Pie ───────────────────────────────────────────────────────────── */
+
 .foot {
   display: flex;
   align-items: baseline;
@@ -135,7 +230,6 @@
   color: inherit;
   font: inherit;
   font-size: 21px;
-  cursor: pointer;
 }
 
 .more:hover {
