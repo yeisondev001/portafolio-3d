@@ -1,18 +1,14 @@
 import { Html } from '@react-three/drei'
-import { stack } from '../../data/stack'
+import { stack, type Category } from '../../data/stack'
 import { useStore } from '../../store/useStore'
 import styles from './StackBoard.module.css'
 
 /**
- * El tablero del stack, con los logos sobre la pizarra.
+ * El tablero del stack, con los logos agrupados sobre la pizarra.
  *
  * Mismo principio que la pantalla del monitor: HTML real pegado a la
- * superficie, con su perspectiva. Desde la puerta se ven los logos y se
- * entiende de qué va el tablero aunque no se lean los nombres.
- *
- * Sin barra de encabezado ni botones flotantes: la primera versión los tenía
- * y se leía como una diapositiva pegada a la pared. Lo único de interfaz
- * aparece cuando la cámara ya está encima.
+ * superficie, con su perspectiva. Sin barra de encabezado ni botones
+ * flotantes — eso lo hacía leer como una diapositiva pegada a la pared.
  *
  * Los logos son de Simple Icons (CC0). Vienen monocromos, así que se usan de
  * máscara y se pintan con el color de cada marca — ver el CSS.
@@ -26,6 +22,20 @@ const CANVAS_WIDTH = 1150
 const DREI_TRANSFORM_FACTOR = 40
 
 /**
+ * Los bloques del tablero.
+ *
+ * No son las categorías tal cual: móvil tiene una sola tecnología y una fila
+ * entera para ella desperdicia alto. Juntándola con backend entran cuatro
+ * filas con aire, en vez de cinco apretadas.
+ */
+const GROUPS: { label: string; categories: Category[] }[] = [
+  { label: 'Lenguajes', categories: ['lenguaje'] },
+  { label: 'Frontend', categories: ['frontend'] },
+  { label: 'Backend y móvil', categories: ['backend', 'movil'] },
+  { label: 'DevOps e infraestructura', categories: ['devops'] },
+]
+
+/**
  * Inclinación de cada logo, en grados.
  *
  * Puestos perfectamente rectos se leen como una tabla; torcidos un grado o
@@ -35,7 +45,7 @@ const DREI_TRANSFORM_FACTOR = 40
 function tilt(id: string): number {
   let hash = 0
   for (const char of id) hash = (hash * 31 + char.charCodeAt(0)) % 1000
-  return ((hash % 9) - 4) * 0.6
+  return ((hash % 9) - 4) * 0.5
 }
 
 export function StackBoard() {
@@ -53,26 +63,36 @@ export function StackBoard() {
       wrapperClass={styles.wrapper}
     >
       <div className={`${styles.board} ${zoomed ? styles.interactive : ''}`}>
-        <div className={styles.grid}>
-          {stack.map((tech) => (
-            <span
-              key={tech.id}
-              className={styles.tech}
-              style={{ transform: `rotate(${tilt(tech.id)}deg)` }}
-            >
-              <span
-                className={styles.logo}
-                style={{
-                  backgroundColor: tech.color,
-                  maskImage: `url(/img/stack/${tech.id}.svg)`,
-                  WebkitMaskImage: `url(/img/stack/${tech.id}.svg)`,
-                }}
-                aria-hidden="true"
-              />
-              <span className={styles.name}>{tech.name}</span>
-            </span>
-          ))}
-        </div>
+        {GROUPS.map((group) => {
+          const items = stack.filter((tech) => group.categories.includes(tech.category))
+          if (items.length === 0) return null
+
+          return (
+            <section key={group.label} className={styles.group}>
+              <h3 className={styles.label}>{group.label}</h3>
+              <div className={styles.row}>
+                {items.map((tech) => (
+                  <span
+                    key={tech.id}
+                    className={styles.tech}
+                    style={{ transform: `rotate(${tilt(tech.id)}deg)` }}
+                  >
+                    <span
+                      className={styles.logo}
+                      style={{
+                        backgroundColor: tech.color,
+                        maskImage: `url(/img/stack/${tech.id}.svg)`,
+                        WebkitMaskImage: `url(/img/stack/${tech.id}.svg)`,
+                      }}
+                      aria-hidden="true"
+                    />
+                    <span className={styles.name}>{tech.name}</span>
+                  </span>
+                ))}
+              </div>
+            </section>
+          )
+        })}
 
         {zoomed && (
           <div className={styles.foot}>
