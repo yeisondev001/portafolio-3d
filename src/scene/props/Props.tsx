@@ -411,15 +411,9 @@ export function Props() {
       <Mueble file="teclado" position={[-0.68, 0.758, -1.72]} rotation={[0, -0.16, 0]} scale={1.56} />
 
       {/* Mouse, a la derecha del teclado. Había teclado y no había mouse:
-          es lo primero que el ojo nota y no tiene explicación posible. */}
-      <Piece
-        position={[-0.5, 0.762, -1.63]}
-        rotation={[0, -0.1, 0]}
-        size={[0.062, 0.03, 0.105]}
-        color={METAL}
-        roughness={0.35}
-        radius={0.014}
-      />
+          es lo primero que el ojo nota y no tiene explicación posible.
+          A 1,15 mide 6,9 x 2,9 x 9,1 cm, que es un mouse de verdad. */}
+      <Mueble file="mouse" position={[-0.5, 0.747, -1.63]} rotation={[0, -0.1, 0]} scale={1.15} />
 
       {/* Cuaderno y lapicera, en el frente derecho: la esquina que quedaba
           pelada desde cualquier punto del cuarto */}
@@ -435,24 +429,29 @@ export function Props() {
         y el avatar tapan toda la mitad derecha, así que el mouse, la carpeta
         y el cuaderno solo aparecen al acercarse.
       */}
-      <group position={[-1.25, 0, -2.06]} rotation={[0, 0.22, 0]}>
-        <Piece position={[0, 0.775, 0]} size={[0.185, 0.045, 0.245]} color="#6b4f3f" roughness={0.9} radius={0.004} />
-        <Piece position={[0.012, 0.817, 0.014]} rotation={[0, -0.12, 0]} size={[0.17, 0.038, 0.23]} color="#4a6b6b" roughness={0.9} radius={0.004} />
-      </group>
+      {/* El modelo mide 0,929 de ancho: a 0,26 queda una pila de 24 cm. Su
+          base está 0,083 por debajo del origen, de ahí el ajuste en Y para
+          que apoye en la tapa del escritorio (0,747) y no la atraviese. */}
+      <Mueble file="libros" position={[-1.25, 0.769, -2.06]} rotation={[0, 0.22, 0]} scale={0.26} />
 
       {/* Velador: la fuente cálida dominante */}
       <Mueble file="velador" position={[-1.52, 0.755, -1.98]} rotation={[0, 0.4, 0]} scale={0.8} />
 
-      {/* Celular: el contacto */}
-      <Piece
-        position={[-0.32, 0.767, -1.78]}
-        rotation={[0, 0.5, 0]}
-        size={[0.072, 0.011, 0.15]}
-        color={METAL}
-        roughness={0.25}
-        radius={0.008}
+      {/*
+        Celular: el contacto.
+
+        El modelo viene parado, con su largo sobre Y. El giro de -90° en X lo
+        acuesta; el giro en Z lo hace girar sobre la mesa. Van en ese orden
+        porque Three aplica Z primero y X al final: puesto en Y, el giro sería
+        sobre el eje largo del teléfono y lo dejaría de canto.
+      */}
+      <group
+        position={[-0.32, 0.752, -1.78]}
+        rotation={[-Math.PI / 2, 0, 0.5]}
         {...clickable(() => openPanel('contacto'))}
-      />
+      >
+        <Mueble file="celular" position={[0, 0, 0]} scale={0.177} />
+      </group>
 
       {/* Las etiquetas solo existen estando en el escritorio: de lejos
           serían dos puntitos más peleándole el clic al monitor */}
@@ -471,15 +470,9 @@ export function Props() {
         eso es peor todavía: se va del cuarto a un visor de PDF del sistema.
         Ahora la descarga es un botón dentro del panel, no la única salida.
       */}
-      <Piece
-        position={[-0.42, 0.775, -2.02]}
-        rotation={[0, -0.28, 0]}
-        size={[0.23, 0.035, 0.31]}
-        color={PAPER}
-        roughness={0.95}
-        radius={0.006}
-        {...clickable(() => openPanel('cv'))}
-      />
+      <group {...clickable(() => openPanel('cv'))}>
+        <Mueble file="carpeta" position={[-0.42, 0.768, -2.02]} rotation={[0, -0.28, 0]} scale={1.385} />
+      </group>
 
       {/* Taza: el objeto que dice que acá vive alguien */}
       <group position={[-0.28, 0, -1.95]}>
@@ -622,6 +615,10 @@ const MODELS = [
   'teclado',
   'cuadro',
   'corcho',
+  'libros',
+  'mouse',
+  'celular',
+  'carpeta',
 ]
 
 for (const file of MODELS) useGLTF.preload(`/models/muebles/${file}.glb`)

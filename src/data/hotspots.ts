@@ -73,7 +73,23 @@ export const HOTSPOTS: readonly Hotspot[] = [
     id: 'entrada',
     label: 'Entrada',
     camera: [0.45, 1.62, 1.7],
-    target: [-0.5, 1.12, -1.5],
+    /*
+     * Mira derecho al norte, no hacia la izquierda.
+     *
+     * Apuntando a -0,5 el eje de la vista quedaba 16 grados a la izquierda y
+     * el tablero del stack —que está en la pared este— caía 48 grados a la
+     * derecha, fuera del medio campo de 43 que da un fov de 55 en pantalla
+     * ancha: se veía una astilla en el borde. Derecho al norte queda a 32
+     * grados y entra entero.
+     *
+     * El avatar pasa a estar apenas a la izquierda del centro en vez de
+     * apenas a la derecha, que compone igual o mejor.
+     *
+     * En celular vertical el campo horizontal baja a 31 grados y no hay
+     * encuadre que meta al avatar y al tablero a la vez: ahí el tablero se
+     * alcanza por la barra de abajo.
+     */
+    target: [0.45, 1.12, -1.5],
     marker: [0.45, 1.48, 1.5],
     panel: null,
     duration: 1.8,

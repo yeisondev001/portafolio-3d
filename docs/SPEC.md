@@ -456,6 +456,17 @@ Vienen en escalas arbitrarias — la estantería medía 4,4 m de alto y la papel
 2,2 — así que cada uno lleva en `Props.tsx` su factor calculado contra la caja
 contenedora medida. **Cambiar un modelo obliga a recalcular su factor.**
 
+Los objetos chicos del escritorio también son modelos, no cajas dibujadas a mano:
+libro, mouse, celular y la pila de papeles del CV. Todos de Poly Pizza.
+
+| Modelo | Autor | Licencia |
+|---|---|---|
+| `celular`, `mouse`, `libros` | Quaternius y otros | CC0 |
+| `carpeta` (Small Stack of Paper) | Jarlan Perez | **CC-BY** |
+
+**El único CC-BY es la pila de papeles y por eso pide atribución.** Si el crédito
+molesta, hay que reemplazarlo por uno CC0, no borrar la línea.
+
 Por qué modelos y no cajas: cada mueble eran entre 3 y 14 cajas sueltas, y cada
 caja es un draw call. Reemplazarlos bajó de ~80 a ~35, dentro del presupuesto
 de §7 por primera vez.
