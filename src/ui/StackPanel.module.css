@@ -19,7 +19,7 @@
 
 .card {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   align-items: flex-start;
   padding: 14px 16px;
   border: 1px solid rgb(255 255 255 / 0.12);
@@ -47,12 +47,25 @@
   opacity: 0.78;
 }
 
-.dot {
+/*
+ * El mismo logo que el tablero de la pared, con la misma técnica: los SVG de
+ * Simple Icons son monocromos, así que se usan de máscara y se pinta el fondo
+ * con el color de la marca.
+ *
+ * Antes acá había un punto de color. Reconocer el logo es inmediato; deducir
+ * la tecnología a partir de un círculo del mismo color, no.
+ */
+.logo {
   flex-shrink: 0;
-  width: 10px;
-  height: 10px;
-  margin-top: 6px;
-  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin-top: 2px;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
 }
 
 .legend {

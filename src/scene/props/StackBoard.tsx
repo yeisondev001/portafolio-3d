@@ -51,8 +51,16 @@ function tilt(id: string): number {
 export function StackBoard() {
   const active = useStore((s) => s.active)
   const openPanel = useStore((s) => s.openPanel)
+  const panel = useStore((s) => s.panel)
 
   const zoomed = active === 'stack'
+
+  /*
+   * Con un panel abierto este HTML se transparenta por detrás y ensucia la
+   * lectura: el fondo del panel lo atenúa, pero no lo tapa. Como es DOM y no
+   * geometría, la solución es no dibujarlo.
+   */
+  if (panel) return null
 
   return (
     <Html

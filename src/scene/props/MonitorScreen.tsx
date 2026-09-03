@@ -37,11 +37,19 @@ const DREI_TRANSFORM_FACTOR = 40
 export function MonitorScreen() {
   const active = useStore((s) => s.active)
   const openPanel = useStore((s) => s.openPanel)
+  const panel = useStore((s) => s.panel)
   const [selected, setSelected] = useState<Project | null>(null)
 
   // Solo se puede tocar cuando la cámara está encima. De lejos el clic
   // tiene que llegar a la pantalla 3D, que es la que acerca la cámara.
   const interactive = active === 'monitor'
+
+  /*
+   * Con un panel abierto este HTML se transparenta por detrás y ensucia la
+   * lectura: el fondo del panel lo atenúa, pero no lo tapa. Como es DOM y no
+   * geometría, la solución es no dibujarlo.
+   */
+  if (panel) return null
 
   return (
     <Html

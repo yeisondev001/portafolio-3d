@@ -41,7 +41,15 @@ export default function StackPanel() {
                   className={styles.card}
                   style={{ borderLeftColor: tech.color }}
                 >
-                  <span className={styles.dot} style={{ background: tech.color }} />
+                  <span
+                    className={styles.logo}
+                    style={{
+                      backgroundColor: tech.color,
+                      maskImage: `url(/img/stack/${tech.id}.svg)`,
+                      WebkitMaskImage: `url(/img/stack/${tech.id}.svg)`,
+                    }}
+                    aria-hidden="true"
+                  />
                   <div>
                     <h4 className={styles.name}>{tech.name}</h4>
                     <p className={styles.level}>{LEVEL_LABEL[tech.level]}</p>
