@@ -111,7 +111,7 @@ export const stack: Tech[] = [
     level: 'aprendiendo',
     note: 'El cuarto que estás recorriendo.',
     projects: ['portafolio'],
-    color: '#b9c2cc',
+    color: '#4b5563',
   },
 
   // ── Backend ──

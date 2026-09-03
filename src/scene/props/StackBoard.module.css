@@ -1,7 +1,14 @@
 /*
  * Tablero del stack, dibujado a 1150 × 820 px y encogido hasta medir 1 m en
- * la escena. Igual que el monitor: los píxeles de acá son unidades del
- * tablero virtual, así que hay que diseñar con tipografía grande.
+ * la escena.
+ *
+ * La primera versión tenía título, contador y un botón redondeado: se leía
+ * como una diapositiva pegada a la pared, no como un objeto del cuarto. Un
+ * tablero real no tiene barra de encabezado.
+ *
+ * Ahora es una pizarra clara con los logos puestos encima como calcomanías,
+ * cada una con una inclinación mínima. Sin nada de interfaz hasta que la
+ * cámara está encima.
  */
 
 .wrapper,
@@ -20,10 +27,12 @@
   height: 820px;
   display: flex;
   flex-direction: column;
-  padding: 40px 46px;
+  justify-content: center;
+  padding: 64px 58px;
   box-sizing: border-box;
-  background: #1c232b;
-  color: #e8eef5;
+  /* Blanco tiza, no blanco puro: el papel y las pizarras nunca son #fff */
+  background: #efece4;
+  color: #2b2721;
   font-family:
     system-ui,
     -apple-system,
@@ -34,52 +43,19 @@
   overflow: hidden;
 }
 
-.head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 24px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid rgb(232 238 245 / 0.14);
-}
-
-.title {
-  margin: 0;
-  font-size: 42px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-}
-
-.count {
-  font-size: 24px;
-  opacity: 0.5;
-}
-
-/*
- * Diecisiete tecnologías en cinco columnas son cuatro filas. Las medidas de
- * abajo están ajustadas para que la última fila y el botón entren completos:
- * con logos de 72 px la última fila se cortaba.
- */
 .grid {
-  flex: 1;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 18px 14px;
-  align-content: center;
-  margin: 18px 0;
-  min-height: 0;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 34px 20px;
+  justify-items: center;
 }
 
 .tech {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: inherit;
-  font: inherit;
+  gap: 10px;
+  width: 100%;
   text-align: center;
 }
 
@@ -88,8 +64,8 @@
  * fondo permite darles el color oficial de cada marca sin editar el archivo.
  */
 .logo {
-  width: 56px;
-  height: 56px;
+  width: 74px;
+  height: 74px;
   mask-repeat: no-repeat;
   mask-position: center;
   mask-size: contain;
@@ -101,41 +77,41 @@
 .name {
   font-size: 19px;
   line-height: 1.2;
-  opacity: 0.9;
+  opacity: 0.72;
 }
 
-.level {
-  font-size: 15px;
-  opacity: 0.5;
-}
-
+/*
+ * El pie aparece solo de cerca. De lejos ensuciaba el tablero con texto
+ * ilegible que solo servía para que pareciera una página web.
+ */
 .foot {
-  flex-shrink: 0;
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 20px;
-  padding-top: 18px;
-  border-top: 2px solid rgb(232 238 245 / 0.14);
+  margin-top: 44px;
+  padding-top: 20px;
+  border-top: 2px solid rgb(43 39 33 / 0.16);
 }
 
-.hint {
+.label {
   font-size: 21px;
-  opacity: 0.45;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.42;
 }
 
-.expand {
-  padding: 13px 28px;
+.more {
+  padding: 0;
   border: 0;
-  border-radius: 999px;
-  background: #e8eef5;
-  color: #141a20;
+  border-bottom: 2px solid rgb(43 39 33 / 0.35);
+  background: none;
+  color: inherit;
   font: inherit;
   font-size: 22px;
-  font-weight: 500;
   cursor: pointer;
 }
 
-.expand:hover {
-  background: #fff;
+.more:hover {
+  border-bottom-color: rgb(43 39 33 / 0.8);
 }
