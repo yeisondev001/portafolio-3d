@@ -1,9 +1,9 @@
 import { useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import type { Group } from 'three'
+import { useStore } from '../store/useStore'
 import { Avatar } from './Avatar'
 import { Chair } from './props/Props'
-import { useStore } from '../store/useStore'
 
 /**
  * La silla giratoria con el autor sentado.

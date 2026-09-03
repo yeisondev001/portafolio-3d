@@ -41,6 +41,18 @@ const HEAD_EASE = 0.12
 /** Segundos que tarda el cruce entre dos animaciones */
 const FADE = 0.4
 /**
+ * Velocidad de los clips.
+ *
+ * El "Sitting" de Mixamo trae bastante movimiento de inactividad y a
+ * velocidad normal se lee inquieto. Al 75% los mismos gestos quedan pausados
+ * sin llegar a cámara lenta.
+ *
+ * La seña se baja menos: es un gesto corto y con intención, y si se arrastra
+ * pierde la lectura de "vení".
+ */
+const IDLE_SPEED = 0.75
+const GESTURE_SPEED = 0.9
+/**
  * Cuadros por segundo a los que corre la animación.
  *
  * El avatar en movimiento rompe el `frameloop="demand"` (CLAUDE.md regla 2):
@@ -143,6 +155,7 @@ export function Avatar({ position = [0, 0, 0], rotation = [0, 0, 0] }: Props) {
       .fadeIn(FADE)
       .play()
     next.clampWhenFinished = once
+    next.timeScale = once ? GESTURE_SPEED : IDLE_SPEED
 
     current.current?.fadeOut(FADE)
     current.current = next
