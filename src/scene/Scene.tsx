@@ -6,6 +6,7 @@ import { Room } from './Room'
 import { Workstation } from './Workstation'
 import { Props } from './props/Props'
 import { CameraRig } from './CameraRig'
+import { Lens } from './Lens'
 import { Hotspot } from './Hotspot'
 import { Wake, WakeOnLoad } from './Wake'
 
@@ -107,6 +108,7 @@ export function Scene() {
         <WakeOnLoad />
         <Workstation />
       </Suspense>
+      <Lens />
       <CameraRig />
 
       {HOTSPOTS.map((hotspot) => (
