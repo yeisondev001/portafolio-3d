@@ -1,0 +1,68 @@
+/*
+ * El aviso va justo encima de la barra de zonas, no en el medio de la
+ * pantalla: no es un cartel que interrumpe, es una sugerencia. Se puede
+ * ignorar y el sitio funciona igual.
+ */
+.hint {
+  position: absolute;
+  z-index: 12;
+  left: 14px;
+  right: 14px;
+  bottom: calc(78px + env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px 11px 14px;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  border-radius: 14px;
+  background: rgb(16 13 11 / 0.82);
+  backdrop-filter: blur(6px);
+  color: #f2ede6;
+  font-size: 13.5px;
+  line-height: 1.35;
+  animation: aparecer 420ms ease both 1.2s;
+}
+
+/* Con retraso: aparecer junto con el cuarto tapa la primera impresión */
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.icon {
+  flex-shrink: 0;
+  font-size: 17px;
+  opacity: 0.75;
+}
+
+.close {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.1);
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus-visible {
+  background: rgb(255 255 255 / 0.24);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hint {
+    animation: none;
+  }
+}

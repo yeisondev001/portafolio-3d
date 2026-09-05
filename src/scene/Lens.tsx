@@ -31,9 +31,15 @@ const REFERENCE_FOV = 55
  *
  * A 80° tampoco servía, por otro motivo: en un iPhone el tercio de arriba de
  * la pantalla quedaba en techo vacío. El campo vertical de más no agrega
- * cuarto, agrega pared. A 70° el avatar y el mural ocupan la pantalla.
+ * cuarto, agrega pared.
+ *
+ * Y a 70° seguía deformando: al abrir el lente, lo que entra de más entra
+ * estirado en los bordes. A 62° casi no se nota. Lo que se pierde de ancho
+ * lo recupera el encuadre propio de cada punto para pantallas verticales
+ * —ver `portrait` en hotspots.ts—, que acerca la cámara en vez de abrir
+ * el lente.
  */
-const MAX_FOV = 70
+const MAX_FOV = 62
 
 export function Lens() {
   const camera = useThree((state) => state.camera)

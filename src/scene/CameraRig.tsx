@@ -4,6 +4,7 @@ import { Vector3 } from 'three'
 import type { PerspectiveCamera } from 'three'
 import { useStore } from '../store/useStore'
 import { ENTRADA, getHotspot } from '../data/hotspots'
+import type { Hotspot } from '../data/hotspots'
 
 // Vectores reutilizados fuera del componente: nunca se crean objetos
 // dentro de useFrame (CLAUDE.md, convenciones de código)
@@ -14,6 +15,15 @@ const END_TARGET = new Vector3()
 const AWAY = new Vector3()
 
 const DEFAULT_DURATION = 1.6
+
+/**
+ * El encuadre que corresponde a la forma de la ventana.
+ *
+ * Parado, un punto puede tener el suyo propio: ver `portrait` en hotspots.ts.
+ */
+function framing(hotspot: Hotspot, aspect: number) {
+  return aspect < 1 && hotspot.portrait ? hotspot.portrait : hotspot
+}
 
 /** Suavizado con arranque y frenada — smootherstep */
 function ease(t: number): number {
@@ -28,6 +38,7 @@ function ease(t: number): number {
 export function CameraRig() {
   const active = useStore((s) => s.active)
   const camera = useThree((s) => s.camera)
+  const size = useThree((s) => s.size)
   const invalidate = useThree((s) => s.invalidate)
   const setTraveling = useStore((s) => s.setTraveling)
 
@@ -39,12 +50,13 @@ export function CameraRig() {
 
   useEffect(() => {
     const hotspot = getHotspot(active)
+    const shot = framing(hotspot, size.width / size.height)
 
     // Al cargar la página no se viaja: se aparece directamente en la entrada
     if (isFirstRun.current) {
       isFirstRun.current = false
-      camera.position.set(...hotspot.camera)
-      lookAt.current.set(...hotspot.target)
+      camera.position.set(...shot.camera)
+      lookAt.current.set(...shot.target)
       camera.lookAt(lookAt.current)
       invalidate()
       return
@@ -52,8 +64,8 @@ export function CameraRig() {
 
     START_POS.copy(camera.position)
     START_TARGET.copy(lookAt.current)
-    END_POS.set(...hotspot.camera)
-    END_TARGET.set(...hotspot.target)
+    END_POS.set(...shot.camera)
+    END_TARGET.set(...shot.target)
 
     // Alejarse si la ventana es angosta y el objeto no entraría a lo ancho
     if (hotspot.fitWidth) {
@@ -73,7 +85,31 @@ export function CameraRig() {
     duration.current = hotspot.duration ?? DEFAULT_DURATION
     setTraveling(true)
     invalidate()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active, camera, invalidate, setTraveling])
+
+  /*
+   * Al girar el teléfono cambia el encuadre, y hay que saltar al nuevo sin
+   * animar: girar la pantalla no es viajar a otro lado del cuarto, y una
+   * cámara desplazándose sola después de rotar se lee como un error.
+   *
+   * Solo cuando cambia de parado a acostado o al revés. Agrandar una ventana
+   * de escritorio no toca nada.
+   */
+  const wasPortrait = useRef(size.width / size.height < 1)
+
+  useEffect(() => {
+    const isPortrait = size.width / size.height < 1
+    if (isPortrait === wasPortrait.current) return
+    wasPortrait.current = isPortrait
+
+    const shot = framing(getHotspot(active), size.width / size.height)
+    progress.current = 1
+    camera.position.set(...shot.camera)
+    lookAt.current.set(...shot.target)
+    camera.lookAt(lookAt.current)
+    invalidate()
+  }, [size, active, camera, invalidate])
 
   useFrame((_, delta) => {
     if (progress.current >= 1) return

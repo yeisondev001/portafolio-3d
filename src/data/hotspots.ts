@@ -48,6 +48,21 @@ export type Hotspot = {
    * saca de la barra.
    */
   marker?: [number, number, number]
+  /**
+   * Encuadre propio para pantallas verticales.
+   *
+   * En un celular parado el ancho visible es como un tercio del alto, así que
+   * el cuarto de 5 m no entra: o se ve deformado por abrir el lente, o se ve
+   * de muy cerca. No es un problema de estilos, es óptica.
+   *
+   * Cuando un punto tiene un encuadre que funciona parado, va acá. Los que
+   * miran una pared —el mural, el tablero, el monitor— no lo necesitan: los
+   * resuelve `fitWidth`, que aleja la cámara hasta que el objeto entra.
+   */
+  portrait?: {
+    camera: [number, number, number]
+    target: [number, number, number]
+  }
   /** Panel que abre al llegar, si abre alguno */
   panel: PanelId | null
   /** Segundos que dura el viaje */
@@ -73,6 +88,18 @@ export const HOTSPOTS: readonly Hotspot[] = [
     id: 'entrada',
     label: 'Entrada',
     camera: [0.45, 1.62, 1.7],
+    /*
+     * Parado, la cámara se mete en el cuarto y encuadra al autor.
+     *
+     * Desde la puerta y en vertical solo se veía su espalda ocupando la
+     * pantalla. A dos metros entra él, la silla y algo del escritorio, sin
+     * abrir el lente y sin deformar. El cuarto completo se ve girando el
+     * teléfono, que es lo que sugiere el aviso de la interfaz.
+     */
+    portrait: {
+      camera: [0.12, 1.5, 0.95],
+      target: [-0.02, 1.12, -1.15],
+    },
     /*
      * Mira derecho al norte, no hacia la izquierda.
      *
