@@ -184,3 +184,15 @@
     justify-content: flex-start;
   }
 }
+
+/*
+ * En celular las zonas no entran y la barra se desliza. Sin señal, la última
+ * queda cortada al medio de la palabra y parece un error de maquetado en vez
+ * de algo que se puede arrastrar. El degradado del borde lo dice sin texto.
+ */
+@media (max-width: 620px) {
+  .zones {
+    mask-image: linear-gradient(to right, #000 86%, transparent);
+    -webkit-mask-image: linear-gradient(to right, #000 86%, transparent);
+  }
+}

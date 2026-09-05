@@ -27,10 +27,13 @@ const REFERENCE_FOV = 55
  * Tope del fov vertical.
  *
  * Sin límite, un celular angosto pediría 127° y la escena se vería de ojo de
- * pez: las paredes se curvan y los muebles de los bordes se estiran. A 80° se
- * recupera la mayor parte del ancho perdido sin llegar a deformar.
+ * pez: las paredes se curvan y los muebles de los bordes se estiran.
+ *
+ * A 80° tampoco servía, por otro motivo: en un iPhone el tercio de arriba de
+ * la pantalla quedaba en techo vacío. El campo vertical de más no agrega
+ * cuarto, agrega pared. A 70° el avatar y el mural ocupan la pantalla.
  */
-const MAX_FOV = 80
+const MAX_FOV = 70
 
 export function Lens() {
   const camera = useThree((state) => state.camera)

@@ -92,3 +92,21 @@
     animation: none;
   }
 }
+
+/*
+ * En celular no se dibujan.
+ *
+ * En una pantalla de 428 px la pastilla ocupa casi un cuarto del ancho, y se
+ * planta encima justo de lo que anuncia: la de certificaciones tapaba los
+ * diplomas. Achicarla no alcanza — el problema es que compite por un espacio
+ * que en el teléfono no sobra.
+ *
+ * La barra de abajo ya lista las mismas zonas y no le roba lugar a la escena,
+ * y los objetos del cuarto —el monitor, el mural, la carpeta— siguen siendo
+ * clickeables. No se pierde ningún camino.
+ */
+@media (max-width: 620px) {
+  .dot {
+    display: none;
+  }
+}
