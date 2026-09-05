@@ -126,6 +126,9 @@ export const HOTSPOTS: readonly Hotspot[] = [
     label: 'Sobre mí',
     camera: [0.0, 1.32, 0.4],
     target: [-0.02, 1.12, -1.15],
+    // Él y algo de aire alrededor. En pantalla angosta si no se aleja queda
+    // encuadrado en la cara.
+    fitWidth: 0.95,
     marker: [-0.02, 1.5, -1.15],
     panel: 'sobre-mi',
   },
@@ -134,6 +137,18 @@ export const HOTSPOTS: readonly Hotspot[] = [
     label: 'Escritorio',
     camera: [-0.9, 1.24, -1.02],
     target: [-0.9, 1.04, -1.98],
+    /*
+     * Todo el frente del escritorio: el monitor, el celular y la carpeta.
+     *
+     * Sin esto, en un celular parado el campo horizontal daba 54 cm y se veía
+     * un tercio de la mesa — el monitor solo, sin las otras dos cosas que hay
+     * para elegir. La cámara se aleja hasta que entren las tres.
+     *
+     * 1,45 y no 1,25: el punto mira al centro del escritorio, en x -0,9, y el
+     * celular está en -0,32. Con 1,25 el encuadre terminaba en -0,275 y su
+     * etiqueta quedaba cortada contra el borde.
+     */
+    fitWidth: 1.45,
     /*
      * Sobre el extremo izquierdo del escritorio, al lado del velador.
      *
