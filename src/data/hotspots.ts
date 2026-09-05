@@ -205,9 +205,11 @@ export const HOTSPOTS: readonly Hotspot[] = [
   {
     id: 'trayectoria',
     label: 'Trayectoria',
-    camera: [-1.15, 1.32, 0.9],
-    target: [-2.5, 1.15, 0.9],
-    marker: [-2.1, 1.32, 0.9],
+    camera: [-1.15, 1.32, -1.25],
+    target: [-2.5, 1.15, -1.25],
+    marker: [-2.05, 1.32, -1.25],
+    // La estantería mide 1,42 m de ancho; con aire alrededor entra entera
+    fitWidth: 1.55,
     panel: 'trayectoria',
   },
 ]

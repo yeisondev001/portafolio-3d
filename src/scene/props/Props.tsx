@@ -98,8 +98,13 @@ const FURNITURE: {
   { file: 'escritorio', position: [-0.9, 0, -1.85], scale: 0.81 },
   { file: 'papelera', position: [-0.05, 0, -1.9], scale: 0.18 },
 
-  // Oeste: la estantería de la trayectoria
-  { file: 'estanteria', position: [-2.32, 0, 0.9], rotation: [0, Math.PI / 2, 0], scale: 0.42, zone: 'trayectoria' },
+  // Oeste: la estantería de la trayectoria.
+  //
+  // Estaba en z 0,9, casi contra la puerta: desde la entrada quedaba 74° a la
+  // izquierda, o sea a tu espalda. En -1,25 son 43° y aparece en el borde del
+  // cuadro. Mide 1,42 m sobre Z, así que ocupa de -1,96 a -0,54 y le quedan
+  // 24 cm hasta la pared norte.
+  { file: 'estanteria', position: [-2.32, 0, -1.25], rotation: [0, Math.PI / 2, 0], scale: 0.42, zone: 'trayectoria' },
 
   // Este: la zona de descanso, del lado contrario al escritorio.
   //
@@ -571,9 +576,10 @@ export function Props() {
         El giro en Z lleva la cara del cuadro —que mira hacia arriba— a mirar
         hacia el este, o sea hacia adentro del cuarto.
       */}
+      {/* Corrido al sur: la estantería se adelantó y ocupaba su lugar */}
       <Mueble
         file="cuadro"
-        position={[-2.46, 1.72, -0.1]}
+        position={[-2.46, 1.72, 0.75]}
         rotation={[0, 0, -Math.PI / 2]}
         scale={3.36}
       />
