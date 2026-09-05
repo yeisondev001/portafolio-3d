@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { Vector3 } from 'three'
-import type { PerspectiveCamera } from 'three'
 import { useStore } from '../store/useStore'
 import { ENTRADA, getHotspot } from '../data/hotspots'
+import { effectiveFov } from './Lens'
 import type { Hotspot } from '../data/hotspots'
 
 // Vectores reutilizados fuera del componente: nunca se crean objetos
@@ -23,6 +23,35 @@ const DEFAULT_DURATION = 1.6
  */
 function framing(hotspot: Hotspot, aspect: number) {
   return aspect < 1 && hotspot.portrait ? hotspot.portrait : hotspot
+}
+
+/**
+ * Deja en END_POS y END_TARGET el destino de la cámara para un punto.
+ *
+ * Si el punto declara `fitWidth`, aleja la cámara hasta que ese ancho entre
+ * en cuadro. La proporción y el fov llegan por parámetro y no se leen de la
+ * cámara a propósito: `camera.aspect` llegaba con el valor de escritorio
+ * todavía puesto, así que en un celular parado la cuenta daba un campo
+ * horizontal de 94° en vez de 31° y la cámara no se alejaba nada. El mural
+ * terminaba dibujado encima del visitante, desbordando la pantalla.
+ */
+function destination(hotspot: Hotspot, aspect: number) {
+  const shot = framing(hotspot, aspect)
+  END_POS.set(...shot.camera)
+  END_TARGET.set(...shot.target)
+
+  if (!hotspot.fitWidth) return
+
+  AWAY.copy(END_POS).sub(END_TARGET)
+  const base = AWAY.length()
+  AWAY.normalize()
+
+  const vertical = (effectiveFov(aspect) * Math.PI) / 180
+  const horizontal = 2 * Math.atan(Math.tan(vertical / 2) * aspect)
+  // Un 6% de aire para que no quede pegado a los bordes
+  const needed = (hotspot.fitWidth / 2 / Math.tan(horizontal / 2)) * 1.06
+
+  END_POS.copy(END_TARGET).addScaledVector(AWAY, Math.max(base, needed))
 }
 
 /** Suavizado con arranque y frenada — smootherstep */
@@ -50,13 +79,13 @@ export function CameraRig() {
 
   useEffect(() => {
     const hotspot = getHotspot(active)
-    const shot = framing(hotspot, size.width / size.height)
+    destination(hotspot, size.width / size.height)
 
     // Al cargar la página no se viaja: se aparece directamente en la entrada
     if (isFirstRun.current) {
       isFirstRun.current = false
-      camera.position.set(...shot.camera)
-      lookAt.current.set(...shot.target)
+      camera.position.copy(END_POS)
+      lookAt.current.copy(END_TARGET)
       camera.lookAt(lookAt.current)
       invalidate()
       return
@@ -64,23 +93,7 @@ export function CameraRig() {
 
     START_POS.copy(camera.position)
     START_TARGET.copy(lookAt.current)
-    END_POS.set(...shot.camera)
-    END_TARGET.set(...shot.target)
 
-    // Alejarse si la ventana es angosta y el objeto no entraría a lo ancho
-    if (hotspot.fitWidth) {
-      const lens = camera as PerspectiveCamera
-      AWAY.copy(END_POS).sub(END_TARGET)
-      const base = AWAY.length()
-      AWAY.normalize()
-
-      const vertical = (lens.fov * Math.PI) / 180
-      const horizontal = 2 * Math.atan(Math.tan(vertical / 2) * lens.aspect)
-      // Un 6% de aire para que no quede pegado a los bordes
-      const needed = (hotspot.fitWidth / 2 / Math.tan(horizontal / 2)) * 1.06
-
-      END_POS.copy(END_TARGET).addScaledVector(AWAY, Math.max(base, needed))
-    }
     progress.current = 0
     duration.current = hotspot.duration ?? DEFAULT_DURATION
     setTraveling(true)
@@ -103,10 +116,12 @@ export function CameraRig() {
     if (isPortrait === wasPortrait.current) return
     wasPortrait.current = isPortrait
 
-    const shot = framing(getHotspot(active), size.width / size.height)
+    // Pasa por destination y no por el encuadre crudo: si el punto declara
+    // fitWidth, al girar hay que recalcular cuánto alejarse
+    destination(getHotspot(active), size.width / size.height)
     progress.current = 1
-    camera.position.set(...shot.camera)
-    lookAt.current.set(...shot.target)
+    camera.position.copy(END_POS)
+    lookAt.current.copy(END_TARGET)
     camera.lookAt(lookAt.current)
     invalidate()
   }, [size, active, camera, invalidate])

@@ -41,6 +41,19 @@ const REFERENCE_FOV = 55
  */
 const MAX_FOV = 62
 
+/**
+ * El fov vertical que corresponde a una proporción de ventana.
+ *
+ * Se exporta porque CameraRig también lo necesita: para saber cuánto alejar la
+ * cámara de una pared tiene que conocer el campo horizontal, y ese sale del
+ * vertical. Leerlo de `camera.fov` era fràgil — ver el comentario allá.
+ */
+export function effectiveFov(aspect: number): number {
+  const halfWidth = Math.tan((REFERENCE_FOV * Math.PI) / 360) * REFERENCE_ASPECT
+  const needed = (2 * Math.atan(halfWidth / aspect) * 180) / Math.PI
+  return Math.min(Math.max(REFERENCE_FOV, needed), MAX_FOV)
+}
+
 export function Lens() {
   const camera = useThree((state) => state.camera)
   const size = useThree((state) => state.size)
@@ -49,11 +62,7 @@ export function Lens() {
     const lens = camera as PerspectiveCamera
     if (!lens.isPerspectiveCamera) return
 
-    const aspect = size.width / size.height
-    const halfWidth = Math.tan((REFERENCE_FOV * Math.PI) / 360) * REFERENCE_ASPECT
-    const needed = (2 * Math.atan(halfWidth / aspect) * 180) / Math.PI
-
-    const fov = Math.min(Math.max(REFERENCE_FOV, needed), MAX_FOV)
+    const fov = effectiveFov(size.width / size.height)
     if (Math.abs(lens.fov - fov) < 0.01) return
 
     lens.fov = fov
