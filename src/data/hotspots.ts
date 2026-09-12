@@ -92,9 +92,9 @@ export const HOTSPOTS: readonly Hotspot[] = [
      * Parado, la cámara se mete en el cuarto y encuadra al autor.
      *
      * Desde la puerta y en vertical solo se veía su espalda ocupando la
-     * pantalla. A dos metros entra él, la silla y algo del escritorio, sin
-     * abrir el lente y sin deformar. El cuarto completo se ve girando el
-     * teléfono, que es lo que sugiere el aviso de la interfaz.
+     * pantalla. A dos metros entran él, la silla y algo del escritorio, sin
+     * abrir el lente ni deformar la escena. Es un encuadre propio de móvil:
+     * prioriza a la persona en vez de intentar meter el cuarto entero.
      */
     portrait: {
       camera: [0.12, 1.5, 0.95],

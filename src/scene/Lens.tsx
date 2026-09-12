@@ -35,9 +35,8 @@ const REFERENCE_FOV = 55
  *
  * Y a 70° seguía deformando: al abrir el lente, lo que entra de más entra
  * estirado en los bordes. A 62° casi no se nota. Lo que se pierde de ancho
- * lo recupera el encuadre propio de cada punto para pantallas verticales
- * —ver `portrait` en hotspots.ts—, que acerca la cámara en vez de abrir
- * el lente.
+ * se resuelve con el encuadre propio de cada punto para pantallas verticales
+ * —ver `portrait` en hotspots.ts—, sin obligar a girar el dispositivo.
  */
 const MAX_FOV = 62
 
