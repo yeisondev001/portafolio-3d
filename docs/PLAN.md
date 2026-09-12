@@ -12,10 +12,10 @@ Ver [SPEC.md](./SPEC.md) para las decisiones de diseño y las reglas de rendimie
 
 | Fase | Nombre | Estado |
 |---|---|---|
-| 1 | Cuarto navegable | ⬜ pendiente |
-| 2 | Lo que un reclutador necesita | ⬜ pendiente |
-| 3 | Certificaciones, stack y trayectoria | ⬜ pendiente |
-| 4 | Avatar | ⬜ pendiente |
+| 1 | Cuarto navegable | 🟨 implementado; falta prueba en celular real |
+| 2 | Lo que un reclutador necesita | 🟨 contenido real; faltan correo y PDF del CV |
+| 3 | Certificaciones, stack y trayectoria | 🟨 datos reales; faltan escaneos y revisión final |
+| 4 | Avatar | 🟨 implementado; falta validación de parecido y rendimiento |
 | 5 | Puerta, pulido y publicación | ⬜ pendiente |
 
 ---
@@ -98,32 +98,32 @@ en celular, sin tirones y sin marear — y el avatar saluda y sigue con la mirad
 **Publicable al terminar esta fase.**
 
 ### Proyectos (el monitor)
-- [ ] `src/data/projects.ts` con la estructura definitiva
-- [ ] Acercamiento especial del monitor: la pantalla llena la vista
-- [ ] `ProjectsPanel.tsx`: grilla de proyectos sobre la vista 3D
-- [ ] Detalle: captura, descripción, stack, links (pestaña nueva)
-- [ ] Cargar imágenes solo al abrir el panel (lazy)
-- [ ] Cargar los proyectos reales
+- [x] `src/data/projects.ts` con la estructura definitiva
+- [x] Acercamiento especial del monitor: la pantalla llena la vista
+- [x] `ProjectsPanel.tsx`: grilla de proyectos sobre la vista 3D
+- [x] Detalle: captura, descripción, stack, links (pestaña nueva)
+- [x] Cargar imágenes solo al abrir el panel (lazy)
+- [x] Cargar los proyectos reales
 
 ### CV (la carpeta)
 - [ ] `public/cv.pdf`
 - [ ] Clic en la carpeta → descarga directa, sin panel
-- [ ] Mismo botón en la barra fija
+- [x] Mismo botón en la barra fija cuando exista el PDF
 
 ### Contacto (el celular)
-- [ ] `ContactPanel.tsx`: mail con `mailto:`, LinkedIn, GitHub
-- [ ] Botón de copiar el mail al portapapeles, con confirmación visual
+- [x] `ContactPanel.tsx`: mail con `mailto:`, LinkedIn, GitHub
+- [x] Botón de copiar el mail al portapapeles, con confirmación visual
 
 ### Sobre mí (el avatar)
-- [ ] `AboutPanel.tsx` con el texto real
+- [x] `AboutPanel.tsx` con el texto real
 - [ ] Foto real opcional junto al avatar
 
 ### Comportamiento común de los paneles
-- [ ] Componente base de panel reutilizado por todos
-- [ ] Botón de salir que devuelve la cámara al cuarto
-- [ ] Cerrar con `Esc` y con el botón de atrás del navegador
-- [ ] Responsive: una columna en celular, botones ≥ 44 px
-- [ ] Todos los paneles con `React.lazy`
+- [x] Componente base de panel reutilizado por todos
+- [x] Botón de salir que devuelve la cámara al cuarto
+- [x] Cerrar con `Esc` y con el botón de atrás del navegador
+- [x] Responsive: una columna en celular, botones ≥ 44 px
+- [x] Todos los paneles con `React.lazy`
 
 **Terminado cuando:** un desconocido puede, desde el celular y sin ayuda, ver los
 proyectos, bajar el CV y encontrar el mail.
@@ -132,14 +132,14 @@ proyectos, bajar el CV y encontrar el mail.
 
 ## Fase 3 — Certificaciones, stack y trayectoria
 
-- [ ] `src/data/certifications.ts`, `stack.ts`, `career.ts`
+- [x] `src/data/certifications.ts`, `stack.ts`, `career.ts`
 - [ ] Diplomas como planos con textura sobre la pared norte
-- [ ] Clic en un diploma → se agranda con emisor, fecha y link de verificación
-- [ ] Pizarra con los logos del stack
-- [ ] Clic en una tecnología → nivel, años, proyectos donde se usó
-- [ ] Estantería: cada libro un trabajo o estudio
-- [ ] `CareerPanel.tsx`: línea de tiempo con puesto, lugar, fechas, una línea
-- [ ] Sumar ubicación, modalidad e idiomas al panel Sobre mí
+- [x] Clic en un diploma → se agranda con emisor y fecha
+- [x] Pizarra con los logos del stack
+- [x] Clic en una tecnología → nivel y contexto de uso
+- [x] Estantería: acceso a trabajo y estudio
+- [x] `CareerPanel.tsx`: línea de tiempo con puesto, lugar, fechas, una línea
+- [x] Sumar ubicación e idiomas confirmados al panel Sobre mí
 - [ ] Atlas de texturas para los logos (un solo archivo, no 20)
 - [ ] Auditar presupuesto: peso, draw calls, FPS en celular
 

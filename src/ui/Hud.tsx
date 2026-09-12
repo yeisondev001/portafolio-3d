@@ -4,6 +4,14 @@ import { profile } from '../data/profile'
 import { useStore } from '../store/useStore'
 import styles from './Hud.module.css'
 
+/* En vertical el contenido pegado a los objetos 3D se lee muy chico. Estos
+   accesos conservan la llegada directa al contenido sin quitar el recorrido
+   del cuarto en pantallas amplias. */
+const MOBILE_PANEL_BY_ZONE = {
+  certificaciones: 'certificaciones',
+  stack: 'stack',
+} as const
+
 /**
  * La interfaz que va sobre la escena.
  *
@@ -18,6 +26,7 @@ import styles from './Hud.module.css'
 export function Hud() {
   const active = useStore((s) => s.active)
   const goTo = useStore((s) => s.goTo)
+  const openPanel = useStore((s) => s.openPanel)
   const traveling = useStore((s) => s.traveling)
   const zones = useRef<HTMLElement>(null)
 
@@ -27,6 +36,15 @@ export function Hud() {
     const actual = zones.current?.querySelector('[aria-current="true"]')
     actual?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
   }, [active])
+
+  const visitZone = (id: (typeof HOTSPOTS)[number]['id']) => {
+    const mobilePanel = MOBILE_PANEL_BY_ZONE[id as keyof typeof MOBILE_PANEL_BY_ZONE]
+    if (mobilePanel && window.matchMedia('(max-width: 620px)').matches) {
+      openPanel(mobilePanel)
+      return
+    }
+    goTo(id)
+  }
 
   return (
     <div className={styles.hud}>
@@ -57,12 +75,19 @@ export function Hud() {
         className={`${styles.zones} ${traveling ? styles.zonesTraveling : ''}`}
         aria-label="Zonas del cuarto"
       >
+        <button
+          type="button"
+          className={`${styles.zone} ${styles.mobileProject}`}
+          onClick={() => openPanel('proyectos')}
+        >
+          Proyectos
+        </button>
         {HOTSPOTS.filter((hotspot) => !hotspot.hidden).map((hotspot) => (
           <button
             key={hotspot.id}
             type="button"
             className={`${styles.zone} ${active === hotspot.id ? styles.zoneActive : ''}`}
-            onClick={() => goTo(hotspot.id)}
+            onClick={() => visitZone(hotspot.id)}
             aria-current={active === hotspot.id ? 'true' : undefined}
           >
             {hotspot.label}

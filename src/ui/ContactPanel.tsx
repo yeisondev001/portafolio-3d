@@ -32,22 +32,21 @@ export default function ContactPanel() {
     <Panel lift title="Contacto" subtitle="Escribime por donde te quede cómodo">
       <ul className={styles.contacts}>
         <li>
-          <a className={styles.contact} href={`mailto:${profile.email}`}>
+          <div className={styles.contact}>
             <span>
               <span className={styles.contactLabel}>Mail</span>
-              <span className={styles.contactValue}>{profile.email}</span>
+              <a className={styles.contactValue} href={`mailto:${profile.email}`}>
+                {profile.email}
+              </a>
             </span>
             <button
               type="button"
               className={styles.copy}
-              onClick={(event) => {
-                event.preventDefault()
-                void copiar()
-              }}
+              onClick={() => void copiar()}
             >
               {copied ? 'Copiado' : 'Copiar'}
             </button>
-          </a>
+          </div>
         </li>
 
         <li>
@@ -72,7 +71,6 @@ export default function ContactPanel() {
             </span>
           </a>
         </li>
-
       </ul>
     </Panel>
   )

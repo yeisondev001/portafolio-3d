@@ -205,7 +205,7 @@
 
 .copy {
   flex-shrink: 0;
-  min-height: 40px;
+  min-height: 44px;
   padding: 0 16px;
   border: 1px solid rgb(255 255 255 / 0.24);
   border-radius: 999px;
@@ -338,5 +338,25 @@
 @media (prefers-reduced-motion: reduce) {
   .lightbox {
     animation: none;
+  }
+}
+
+@media (max-width: 620px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lightbox {
+    padding: 16px;
+  }
+
+  .lightboxFigure {
+    width: 100%;
+  }
+
+  .lightboxCaption {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
   }
 }

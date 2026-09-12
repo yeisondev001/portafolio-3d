@@ -102,23 +102,23 @@ export function CameraRig() {
   }, [active, camera, invalidate, setTraveling])
 
   /*
-   * Al girar el teléfono cambia el encuadre, y hay que saltar al nuevo sin
-   * animar: girar la pantalla no es viajar a otro lado del cuarto, y una
-   * cámara desplazándose sola después de rotar se lee como un error.
+   * El encuadre depende de la proporción real del área visible, no del modelo
+   * de teléfono. Por eso se recalcula también cuando el navegador móvil
+   * muestra u oculta sus barras: cambia el alto útil sin cambiar la orientación.
    *
-   * Solo cuando cambia de parado a acostado o al revés. Agrandar una ventana
-   * de escritorio no toca nada.
+   * El salto es intencional. Redimensionar no es un viaje por el cuarto y una
+   * cámara animándose sola se leería como un error.
    */
-  const wasPortrait = useRef(size.width / size.height < 1)
+  const previousAspect = useRef(size.width / size.height)
 
   useEffect(() => {
-    const isPortrait = size.width / size.height < 1
-    if (isPortrait === wasPortrait.current) return
-    wasPortrait.current = isPortrait
+    const aspect = size.width / size.height
+    if (Math.abs(aspect - previousAspect.current) < 0.01) return
+    previousAspect.current = aspect
 
     // Pasa por destination y no por el encuadre crudo: si el punto declara
-    // fitWidth, al girar hay que recalcular cuánto alejarse
-    destination(getHotspot(active), size.width / size.height)
+    // fitWidth, también hay que recalcular cuánto alejarse al cambiar el alto.
+    destination(getHotspot(active), aspect)
     progress.current = 1
     camera.position.copy(END_POS)
     lookAt.current.copy(END_TARGET)

@@ -149,6 +149,10 @@
 }
 
 @media (max-width: 760px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
   .detail {
     grid-template-columns: 1fr;
     gap: 20px;

@@ -7,8 +7,19 @@
 html,
 body,
 #root {
+  width: 100%;
   height: 100%;
   margin: 0;
+}
+
+/* La barra del navegador móvil cambia de altura al desplazarse. `dvh` evita
+   que el canvas quede corto o aparezca un hueco debajo al volver a la escena. */
+#root {
+  min-height: 100dvh;
+}
+
+body {
+  overflow: hidden;
 }
 
 body {
